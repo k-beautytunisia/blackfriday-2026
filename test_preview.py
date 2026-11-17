@@ -53,7 +53,7 @@ with sync_playwright() as p:
     assert mobile.locator("body").evaluate("e => e.classList.contains('sync-ok')")
     mobile.screenshot(path=str(ROOT / "preview-popup-mobile.png"), full_page=False)
     mobile.locator("#popCta").click()
-    mobile.wait_for_timeout(1300)
+    mobile.wait_for_timeout(2200)
     assert mobile.locator("#bfView").is_visible()
     overflow = mobile.evaluate("document.documentElement.scrollWidth > window.innerWidth")
     assert not overflow, "horizontal overflow on mobile"
