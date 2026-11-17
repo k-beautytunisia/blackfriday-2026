@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+/catalogue.json
+/catalogue.json.tmp
+/site/
+/preview-*.png

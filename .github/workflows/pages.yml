@@ -1,0 +1,58 @@
+name: Black Friday 2026 preview
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout isolated preview repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install collector dependency
+        run: python -m pip install --disable-pip-version-check requests
+      - name: Fetch current public catalog (read-only)
+        run: python collect_catalogue.py
+      - name: Build preview and validate source data
+        run: |
+          python build_site.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          snap = json.loads(Path('catalogue.json').read_text())
+          page = Path('site/index.html').read_text()
+          assert snap['availableCount'] == len(snap['products']) > 0
+          assert page.rstrip().endswith('</html>')
+          assert 'PRÉPROD · REMISES SIMULÉES' in page
+          assert 'sync-error' in page
+          assert 'createOrder' not in page
+          assert 'fetch(' not in page
+          assert '__DATA__' not in page
+          PY
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ./site
+      - name: Deploy preview only
+        id: deployment
+        uses: actions/deploy-pages@v4

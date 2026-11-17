@@ -1,0 +1,1 @@
+Ce dépôt contient une préproduction promotionnelle appartenant à K-Beauty Tunisia et des données de catalogue produit chargées depuis la boutique publique. Ne pas réutiliser les visuels ou les marques sans autorisation. Toute remise affichée est une simulation non activée.
