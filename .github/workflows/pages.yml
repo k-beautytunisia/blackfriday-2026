@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   build-and-deploy:
-    if: github.event_name == 'workflow_dispatch' || vars.BF_PAGES_LIVE == 'true'
+    if: vars.BF_PAGES_LIVE == 'true'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
