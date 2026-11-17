@@ -42,7 +42,7 @@ jobs:
           page = Path('site/index.html').read_text()
           assert snap['availableCount'] == len(snap['products']) > 0
           assert page.rstrip().endswith('</html>')
-          assert 'PRÉPROD · REMISES SIMULÉES' in page
+          assert 'Préproduction · remises simulées' in page
           assert 'sync-error' in page
           assert 'createOrder' not in page
           assert 'fetch(' not in page
