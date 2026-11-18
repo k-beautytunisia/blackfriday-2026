@@ -74,8 +74,8 @@ def expected(pg, cart):
     """Recalcul indépendant en Python de la règle simulée."""
     prods = {p["id"]: p for p in pg.evaluate("window.KBBF.products()")}
     sp = set(pg.evaluate("window.KBBF.special()"))
-    units = sum(cart.values())
-    rate = 20 if units >= 3 else 15 if units == 2 else 10 if units == 1 else 0
+    refs = len(cart)  # produits différents : les quantités ne changent pas le palier
+    rate = 20 if refs >= 3 else 15 if refs == 2 else 10 if refs == 1 else 0
     sub = disc_sp = disc_tier = 0
     for pid, q in cart.items():
         price = prods[pid]["price"] * q
@@ -104,6 +104,11 @@ with sync_playwright() as p:
     assert len(sp) == len(data["special"]) > 0
     assert desktop.locator("#offre-speciale").is_visible()
     assert "dans la limite du stock disponible" in desktop.locator("#offre-speciale").inner_text().lower()
+    # Compte à rebours : fin de l'offre le 30/11/2026 23:59:59 heure de Tunis.
+    import datetime as _dt
+    assert desktop.evaluate("window.KBBF.endsAt") == int(_dt.datetime(2026, 11, 30, 22, 59, 59, tzinfo=_dt.timezone.utc).timestamp() * 1000)
+    assert "Fin de l’offre dans" in desktop.locator(".head-count").inner_text()
+    assert "Prix choc" in desktop.locator(".tierbar").inner_text() and "−30 %" in desktop.locator(".tierbar").inner_text()
     desktop.locator("#spMore").click()
     assert desktop.locator("#spGrid .card.is-sp").count() == len(sp)
     # Cartes : montant économisé en TND, aucun pourcentage sur les cartes produit.
@@ -119,10 +124,14 @@ with sync_playwright() as p:
         assert re.fullmatch(r"−\d{1,2} %", card.locator(".rsave").inner_text().strip()), card.locator(".rsave").inner_text()
         gain = card.locator(".rgain b").inner_text().strip()
         assert gain.endswith("TND") and gain in card.locator("[data-routine]").inner_text()
+        assert "%" not in card.locator("[data-routine]").inner_text(), "bouton routine en pourcentage"
         assert card.evaluate("c => [...c.querySelectorAll('.rgain, .rgain span, [data-routine]')].every(e => e.scrollWidth <= e.clientWidth + 1)"), "routine tronquée"
     # Le mot « stock » ne doit apparaître qu’une fois dans la page (mention de l’offre −30 %).
     visible = desktop.evaluate("document.body.innerText")
     assert len(re.findall("stock", visible, re.I)) <= 1, re.findall(r".{0,40}stock.{0,20}", visible, re.I)
+    # Aucun vocabulaire qui laisse penser à une liste d'invendus ni ancienne période.
+    banned = re.findall(r"offre sp[ée]ciale|s[ée]lection|invendu|21\s*(?:—|au)\s*27|27 nov", visible, re.I)
+    assert not banned, banned
 
     std = [x["id"] for x in desktop.evaluate("window.KBBF.products()") if x["id"] not in sp]
     cases = [
@@ -131,6 +140,9 @@ with sync_playwright() as p:
         {sp[0]: 1, sp[1]: 1, std[0]: 1}, # 3 unités dont 2 spéciales → −20 % sur le standard
         {std[0]: 1, std[1]: 1, std[2]: 1},
         {sp[0]: 1, sp[1]: 1, sp[2]: 1},
+        {std[0]: 3},                     # 3 unités d'un même produit = 1 produit différent → −10 %
+        {std[0]: 2, std[1]: 2},          # 4 unités, 2 produits différents → −15 %
+        {sp[0]: 2, std[0]: 1, std[1]: 1, std[2]: 1},  # 4 produits différents → −20 % hors prix choc
     ]
     for cart in cases:
         desktop.evaluate("window.KBBF.clear()")
@@ -144,6 +156,28 @@ with sync_playwright() as p:
         for line in got["lines"]:
             if line["kind"] == "special":
                 assert line["total"] == by_id[line["id"]]["sp"] * line["qty"], "double remise sur un produit spécial"
+    # Palier : changer une quantité ne change pas le palier ; ajouter/retirer un produit différent oui.
+    desktop.evaluate("window.KBBF.clear()")
+    desktop.evaluate("([a,b]) => {window.KBBF.add(a,1);window.KBBF.add(b,1)}", [std[0], std[1]])
+    assert desktop.evaluate("window.KBBF.calculate()")["rate"] == 15
+    desktop.evaluate("([a]) => window.KBBF.setQty(a, 1)", [std[0]])
+    assert desktop.evaluate("window.KBBF.calculate()")["rate"] == 15
+    desktop.evaluate("([a]) => window.KBBF.setQty(a, -2)", [std[0]])
+    assert desktop.evaluate("window.KBBF.calculate()")["rate"] == 10
+    # Routines : offre autonome à prix fixe, aucune seconde remise, produits internes hors palier.
+    desktop.evaluate("window.KBBF.clear()")
+    if data["routines"]:
+        r0 = desktop.evaluate("window.KBBF.routineCalc(0)")
+        assert r0["now"] % 1000 == 0 and r0["save"] == r0["list"] - r0["now"] > 0
+        desktop.evaluate("window.KBBF.addRoutine(0)")
+        c = desktop.evaluate("window.KBBF.calculate()")
+        assert c["refs"] == 0 and c["rate"] == 0 and c["total"] == r0["now"] and c["routineDiscount"] == r0["save"]
+        desktop.evaluate("([a]) => window.KBBF.add(a,1)", [std[5]])
+        c = desktop.evaluate("window.KBBF.calculate()")
+        exp_line = by_id[std[5]]["price"] - round(by_id[std[5]]["price"] * 90 / 100)
+        assert c["refs"] == 1 and c["rate"] == 10 and c["tierDiscount"] == exp_line, "routine comptée dans le palier"
+        assert c["total"] == r0["now"] + round(by_id[std[5]]["price"] * 90 / 100), "prix de routine modifié"
+        desktop.evaluate("window.KBBF.clear()")
     # Stock : impossible de dépasser la quantité publique.
     desktop.evaluate("window.KBBF.clear()")
     target = by_id[sp[0]]
@@ -153,7 +187,7 @@ with sync_playwright() as p:
     desktop.evaluate("([a,b]) => {window.KBBF.clear();window.KBBF.add(a,1);window.KBBF.add(b,1)}", [sp[0], std[0]])
     desktop.locator("#cartBtn").click()
     foot = desktop.locator("#drFoot").inner_text().lower()
-    assert "offre spéciale" in foot and "paliers" in foot and "simul" in foot
+    assert "prix choc" in foot and "paliers" in foot and "simul" in foot
     desktop.locator("#checkout").click()
     assert desktop.locator("#modal").is_visible()
     assert "aucune commande" in desktop.locator("#modal").inner_text().lower()
@@ -200,7 +234,8 @@ with sync_playwright() as p:
     browser.close()
 
 print(
-    f"PASS V2 | stock={len(data['products'])} | −30 % affichées={len(data['special'])}/55 | packs={len(data['routines'])}/5 | "
+    f"PASS V2.2 | stock={len(data['products'])} | −30 % affichées={len(data['special'])}/55 | packs={len(data['routines'])}/5 | "
     "prix spécial floor 70 % | non-cumul paliers | rupture pack/spécial masquée | fail-closed build+fraîcheur | "
-    "aucun % sur cartes | aucun appel API | responsive 360/375/390/768"
+    "aucun % sur cartes | paliers par produits différents | routines prix fixe hors palier | fin 30/11 | "
+    "aucun appel API | responsive 360/375/390/768"
 )

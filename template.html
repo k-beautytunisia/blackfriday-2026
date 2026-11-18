@@ -141,6 +141,8 @@ body.sync-error > :not(#syncError){display:none!important}
 .tb-msg{flex:0 0 auto;font-size:14px;font-weight:600;color:var(--rose-d);min-width:300px}
 .tb-msg em{font-style:normal;color:var(--gold-d)}
 .tb-save{flex:0 0 auto;font-size:13px;color:var(--ink2);white-space:nowrap}
+.tb-choc{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;padding:.42em .95em;border-radius:999px;background:linear-gradient(135deg,#f9ecd2,#efd9b0);border:1px solid #e3c48f;color:#6e5228;font-size:12.5px;font-weight:700;letter-spacing:.03em;text-decoration:none;white-space:nowrap;box-shadow:0 6px 16px -10px rgba(155,122,69,.8)}
+.tb-choc b{color:var(--rose-d);font-size:15px}
 .tb-save b{color:var(--rose-d);font-size:15px}
 .tb-track{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .tb-seg{position:relative;height:28px;border-radius:999px;background:#f2e8e2;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--ink2);letter-spacing:.04em}
@@ -348,6 +350,7 @@ body.sync-error > :not(#syncError){display:none!important}
 .line .br{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-d);font-weight:700}
 .ltag{display:inline-block;margin-top:4px;font-size:10.5px;font-weight:700;letter-spacing:.04em;padding:.2em .55em;border-radius:6px;background:#fbeef0;color:var(--rose-d)}
 .ltag.special{background:#f6e7c9;color:#6e5228}
+.ltag.rfix{background:#f3e1e6;color:var(--rose-d)}
 .qty{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;margin-top:6px;margin-left:6px;background:#fff;vertical-align:middle}
 .qty button{width:32px;height:30px;font-size:16px;color:var(--rose-d)}
 .qty button:disabled{opacity:.35;cursor:not-allowed}
@@ -549,7 +552,7 @@ body.sync-error > :not(#syncError){display:none!important}
 <!-- ============ VUE 1 : SITE NORMAL (maquette) ============ -->
 <section id="homeView" aria-label="Maquette d’accueil du site K-Beauty Tunisia — aperçu, non intégrée à la boutique">
   <button class="home-bar" id="homeBar" aria-label="Découvrir l’offre Black Friday">
-    <b>BLACK FRIDAY</b><span class="hb-sep">·</span><span data-sp-only>−30 % sur <span data-sp-count>55</span> références</span><span class="hb-sep" data-sp-only>·</span><span class="hb-opt">jusqu’à −20 % sur le panier</span><u>Découvrir →</u>
+    <b>BLACK FRIDAY</b><span class="hb-sep">·</span><span data-sp-only>Prix choc −30 % sur <span data-sp-count>55</span> produits</span><span class="hb-sep" data-sp-only>·</span><span class="hb-opt">jusqu’à −20 % sur le panier</span><u>Découvrir →</u>
   </button>
   <picture>
     <source media="(max-width:760px)" srcset="assets/home-mobile.webp">
@@ -565,18 +568,18 @@ body.sync-error > :not(#syncError){display:none!important}
   <div class="popup-card">
     <button class="x" id="popClose" aria-label="Fermer">×</button>
     <div class="popup-art">
-      <div class="seal"><svg viewBox="0 0 142 142" aria-hidden="true"><defs><path id="cp" fill="none" d="M71,71 m-60,0 a60,60 0 1,1 120,0 a60,60 0 1,1 -120,0"/></defs><text font-size="10" letter-spacing="3.2" fill="#9b7a45" font-family="DM Sans" font-weight="700"><textPath href="#cp">BLACK FRIDAY · K-BEAUTY TUNISIA · 21—27 NOV · </textPath></text></svg><div><span>jusqu’à</span><b data-max>−30%</b></div></div>
+      <div class="seal"><svg viewBox="0 0 142 142" aria-hidden="true"><defs><path id="cp" fill="none" d="M71,71 m-60,0 a60,60 0 1,1 120,0 a60,60 0 1,1 -120,0"/></defs><text font-size="10" letter-spacing="3.2" fill="#9b7a45" font-family="DM Sans" font-weight="700"><textPath href="#cp">BLACK FRIDAY · K-BEAUTY · JUSQU’AU 30 NOV · </textPath></text></svg><div><span>jusqu’à</span><b data-max>−30%</b></div></div>
       __POPUP_FLOATS__
     </div>
     <div class="popup-body">
-      <div class="kicker">Préproduction · offre simulée · 21 — 27 novembre</div>
+      <div class="kicker">Préproduction · offre simulée · jusqu’au 30 novembre</div>
       <h2 id="popTitle">Black Friday<br>K‑Beauty Tunisia</h2>
       <div class="popup-big"><small>jusqu’à</small><b class="rose-text" data-max>−30%</b></div>
       <p class="popup-sub" id="popSub"></p>
       <div class="tiers-mini" id="popTiers">
-        <div class="sp" data-sp-only><small>Sélection</small><b>−30%</b></div>
-        <div><small>1 article</small><b>−10%</b></div>
-        <div><small>2 articles</small><b>−15%</b></div>
+        <div class="sp" data-sp-only><small>Prix choc</small><b>−30%</b></div>
+        <div><small>1 produit</small><b>−10%</b></div>
+        <div><small>2 produits</small><b>−15%</b></div>
         <div><small>3 et +</small><b>−20%</b></div>
       </div>
       <div class="count" data-countdown><span class="lbl">Fin dans</span></div>
@@ -600,12 +603,13 @@ body.sync-error > :not(#syncError){display:none!important}
       </div>
     </div>
     <div class="tierbar">
+      <a class="tb-choc" href="#offre-speciale" data-sp-only>Prix choc <b>−30 %</b></a>
       <div class="tb-msg" id="tbMsg"></div>
       <div class="tb-track" data-track></div>
       <div class="tb-save" id="tbSave"></div>
     </div>
     <nav class="qnav" aria-label="Sections Black Friday">
-      <a href="#offre-speciale" class="hot" data-sp-only>Offre −30 %</a><a href="#paliers">Paliers panier</a><a href="#routines" data-routines-only>Routines</a><a href="#incontournables">Incontournables</a><a href="#boutique">Toute la boutique</a>
+      <a href="#offre-speciale" class="hot" data-sp-only>Prix choc −30 %</a><a href="#paliers">Paliers panier</a><a href="#routines" data-routines-only>Routines</a><a href="#incontournables">Incontournables</a><a href="#boutique">Toute la boutique</a>
     </nav>
     <div class="sync-strip" id="previewRibbon">Préproduction · remises simulées <small id="syncStamp">Vérification des données…</small></div>
   </div>
@@ -613,14 +617,14 @@ body.sync-error > :not(#syncError){display:none!important}
   <section class="hero">
     <div class="hero-in">
       <div>
-        <div class="kicker reveal">Du 21 au 27 novembre · Black Friday</div>
+        <div class="kicker reveal">Black Friday · jusqu’au 30 novembre</div>
         <h1 class="reveal">Black <span class="rose-text">Friday</span></h1>
         <div class="mega reveal"><small>jusqu’à</small><b class="gold-text" data-max>−30%</b></div>
         <div class="offers reveal">
-          <a class="offer sp" href="#offre-speciale" data-sp-only><small>Offre spéciale</small><b>−30 %</b><span>sur <span data-sp-count>55</span> références, prix déjà remisé</span></a>
-          <a class="offer" href="#paliers"><small>Paliers panier</small><b>jusqu’à −20 %</b><span>sur le reste du panier, dès 3 articles</span></a>
+          <a class="offer sp" href="#offre-speciale" data-sp-only><small>Prix choc</small><b>−30 %</b><span>sur <span data-sp-count>55</span> produits, prix déjà remisé</span></a>
+          <a class="offer" href="#paliers"><small>Paliers panier</small><b>jusqu’à −20 %</b><span>sur le reste du panier, dès 3 produits différents</span></a>
         </div>
-        <div class="ctas reveal"><a class="btn btn-rose shine" href="#offre-speciale" id="heroCta">Voir les offres −30 %</a><a class="btn btn-ghost" href="#boutique">Composer mon panier</a></div>
+        <div class="ctas reveal"><a class="btn btn-rose shine" href="#offre-speciale" id="heroCta">Voir les prix choc −30 %</a><a class="btn btn-ghost" href="#boutique">Composer mon panier</a></div>
         <div class="count reveal" data-countdown><span class="lbl">Fin dans</span></div>
       </div>
       <div class="hero-art" id="heroArt">
@@ -636,41 +640,41 @@ body.sync-error > :not(#syncError){display:none!important}
     <section class="sp-band" aria-labelledby="spTitle">
       <div class="sp-head">
         <div>
-          <div class="kicker">Offre spéciale · Black Friday</div>
-          <h2 id="spTitle"><span class="big gold-text">−30 %</span> sur une sélection culte.</h2>
+          <div class="kicker">Prix choc · Black Friday</div>
+          <h2 id="spTitle"><span class="big gold-text">−30 %</span> sur des soins cultes.</h2>
           <p id="spIntro"></p>
         </div>
         <div class="sp-stats">
-          <div><b id="spStatCount">—</b><small>références à −30 %</small></div>
+          <div><b id="spStatCount">—</b><small>produits à −30 %</small></div>
           <div><b id="spStatMax">—</b><small>économisés au maximum sur un produit</small></div>
-          <div><b id="spStatMin">—</b><small>premier prix spécial</small></div>
+          <div><b id="spStatMin">—</b><small>premier prix choc</small></div>
         </div>
       </div>
       <div class="tools sp-tools"><div class="chips" id="spChips"></div></div>
       <div class="grid" id="spGrid"></div>
       <div class="more"><button class="btn btn-gold" id="spMore">Voir toutes les offres</button></div>
-      <p class="sp-rule"><i>i</i><span>Prix spécial affiché directement, <strong>dans la limite du stock disponible</strong>. Non cumulable avec les paliers : chaque article de l’offre spéciale compte toutefois pour débloquer jusqu’à −20 % sur le reste du panier.</span></p>
+      <p class="sp-rule"><i>i</i><span>Prix choc affiché directement, <strong>dans la limite du stock disponible</strong>. Non cumulable avec les paliers : chaque produit à prix choc compte toutefois comme produit différent pour débloquer jusqu’à −20 % sur le reste du panier.</span></p>
     </section>
   </div>
 
   <section class="sec" id="paliers">
-    <div class="sec-h reveal"><h2>Deux façons d’économiser.<br><span class="rose-text">Zéro code à saisir.</span></h2><p>L’offre spéciale et les paliers s’appliquent automatiquement. Plus votre panier grandit, plus vous économisez sur les produits hors offre spéciale.</p></div>
+    <div class="sec-h reveal"><h2>Deux façons d’économiser.<br><span class="rose-text">Zéro code à saisir.</span></h2><p>Prix choc et paliers s’appliquent automatiquement. Plus vous choisissez de produits différents, plus vous économisez sur le reste du panier.</p></div>
     <div class="tiers">
-      <div class="tier sp reveal" data-sp-only><span class="tag">Prix spécial</span><div class="q">Sélection</div><div class="pct">−30%</div><p>Sur <span data-sp-count>55</span> références sélectionnées, prix déjà remisé.</p></div>
-      <div class="tier reveal"><div class="q">1 article</div><div class="pct">−10%</div><p>Dès le premier produit.</p></div>
-      <div class="tier reveal"><div class="q">2 articles</div><div class="pct">−15%</div><p>Sur vos produits hors offre spéciale.</p></div>
-      <div class="tier max reveal"><span class="tag">Meilleur palier</span><div class="q">3 articles et +</div><div class="pct">−20%</div><p>Sur tous vos produits hors offre spéciale.</p></div>
+      <div class="tier sp reveal" data-sp-only><span class="tag">Prix choc</span><div class="q">Black Friday</div><div class="pct">−30%</div><p>Sur <span data-sp-count>55</span> produits, prix déjà remisé.</p></div>
+      <div class="tier reveal"><div class="q">1 produit</div><div class="pct">−10%</div><p>Dès le premier produit.</p></div>
+      <div class="tier reveal"><div class="q">2 produits</div><div class="pct">−15%</div><p>Sur vos produits différents, hors prix choc.</p></div>
+      <div class="tier max reveal"><span class="tag">Meilleur palier</span><div class="q">3 produits et +</div><div class="pct">−20%</div><p>Sur tous vos produits différents, hors prix choc.</p></div>
     </div>
     <div class="example reveal" id="example"></div>
   </section>
 
   <section class="sec" id="routines">
-    <div class="sec-h reveal"><h2>Routines prêtes,<br><span class="rose-text">économie maximale.</span></h2><p>Trois produits complémentaires en un clic : le meilleur palier est débloqué et l’offre spéciale reste appliquée. Une routine n’est proposée que si tous ses produits sont disponibles.</p></div>
+    <div class="sec-h reveal"><h2>Routines prêtes,<br><span class="rose-text">économie maximale.</span></h2><p>Trois produits complémentaires à prix fixe Black Friday, en un clic. Une routine n’est proposée que si tous ses produits sont disponibles.</p></div>
     <div class="routines" id="routineGrid"></div>
   </section>
 
   <section class="sec" id="incontournables">
-    <div class="sec-h reveal"><h2>Les incontournables<br><span class="rose-text">à prix Black Friday.</span></h2><p>Nos références phares encore disponibles. L’économie affichée est celle de votre panier.</p></div>
+    <div class="sec-h reveal"><h2>Les incontournables<br><span class="rose-text">à prix Black Friday.</span></h2><p>Nos soins phares, disponibles maintenant. L’économie affichée suit votre panier.</p></div>
     <div class="scroller" id="bestGrid"></div>
   </section>
 
@@ -679,7 +683,7 @@ body.sync-error > :not(#syncError){display:none!important}
     <div class="tools">
       <div class="chips" id="chips"></div>
       <label class="search"><span aria-hidden="true">⌕</span><span class="sr">Rechercher</span><input id="search" type="search" placeholder="Rechercher une marque, un produit…" autocomplete="off"></label>
-      <select class="sort" id="sort" aria-label="Trier"><option value="sel">Sélection Black Friday</option><option value="save">Plus grosses économies</option><option value="asc">Prix croissant</option><option value="desc">Prix décroissant</option><option value="brand">Marque A → Z</option></select>
+      <select class="sort" id="sort" aria-label="Trier"><option value="sel">Recommandés</option><option value="save">Plus grosses économies</option><option value="asc">Prix croissant</option><option value="desc">Prix décroissant</option><option value="brand">Marque A → Z</option></select>
     </div>
     <div class="count-line" id="countLine"></div>
     <div class="grid" id="grid"></div>
@@ -687,10 +691,10 @@ body.sync-error > :not(#syncError){display:none!important}
   </section>
 
   <section class="final">
-    <div class="kicker">21 — 27 novembre</div>
+    <div class="kicker">Jusqu’au 30 novembre</div>
     <h2>Les meilleures offres <span class="rose-text">partent en premier.</span></h2>
-    <p>Offre spéciale −30 % sur une sélection · paliers jusqu’à −20 % sur le reste du panier.</p>
-    <div class="ctas"><button class="btn btn-rose shine" id="finalCart">Voir mon panier</button><a class="btn btn-ghost" href="#offre-speciale" data-sp-only>Revoir l’offre −30 %</a></div>
+    <p>Prix choc −30 % · jusqu’à −20 % sur le reste du panier dès 3 produits différents.</p>
+    <div class="ctas"><button class="btn btn-rose shine" id="finalCart">Voir mon panier</button><a class="btn btn-ghost" href="#offre-speciale" data-sp-only>Revoir les prix choc</a></div>
   </section>
 </main>
 
@@ -732,38 +736,46 @@ const isSp=p=>SP.has(p.id);
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmt=m=>{m=Math.round(m);const t=Math.floor(m/1000),r=m%1000;const ts=t.toLocaleString('fr-FR').replace(/\u202f|\u00a0/g,' ');return r?`${ts},${String(r).padStart(3,'0')} TND`:`${ts} TND`;};
-const rateFor=u=>u>=3?20:u===2?15:u===1?10:0;
+const rateFor=d=>d>=3?20:d===2?15:d===1?10:0;
 const at=(m,r)=>Math.round(m*(100-r)/100);
-const cart=new Map();
-const units=()=>[...cart.values()].reduce((a,b)=>a+b,0);
+const cart=new Map();   // produits à l'unité : id → quantité
+const rcart=new Map();  // routines (offres autonomes à prix fixe) : index → quantité
+const refs=()=>cart.size; // produits DIFFÉRENTS achetés à l'unité (les routines ne comptent pas)
+const used=id=>(cart.get(id)||0)+[...rcart].reduce((a,[i,q])=>a+(DATA.routines[i].ids.includes(id)?q:0),0);
+const units=()=>[...cart.values()].reduce((a,b)=>a+b,0)+[...rcart].reduce((a,[i,q])=>a+q*DATA.routines[i].ids.length,0);
 
 /* ---------- moteur de calcul (simulation) ----------
-   Offre spéciale : prix spécial fixe (70 % du prix boutique arrondi au dinar inférieur), jamais remisé une seconde fois.
-   Paliers : 1 / 2 / 3+ unités dans le panier (offre spéciale incluse dans le comptage) → −10 / −15 / −20 % sur les produits hors offre spéciale. */
+   Prix choc : 70 % du prix boutique arrondi au dinar inférieur, fixe, jamais remisé une seconde fois.
+   Paliers : 1 / 2 / 3+ produits DIFFÉRENTS achetés à l'unité (prix choc inclus, quantités ignorées)
+             → −10 / −15 / −20 % sur chaque produit hors prix choc.
+   Routines : offre autonome à prix fixe (arrondi au dinar inférieur), ni recalculée ni remisée,
+              et ses produits ne comptent pas dans les paliers. */
+function bundleCalc(ids,routine){const ps=ids.map(id=>byId.get(id)).filter(Boolean);let list=0,now=0;ps.forEach(p=>{list+=p.price;now+=isSp(p)?p.sp:at(p.price,20)});if(routine)now=Math.floor(now/1000)*1000;return{ps,list,now,save:list-now,pct:list?Math.floor((list-now)*100/list):0};}
+const routineCalc=i=>bundleCalc(DATA.routines[i].ids,true);
 function calculate(){
-  const u=units(),rate=rateFor(u);
-  let subtotal=0,specialDiscount=0,tierDiscount=0,spUnits=0,stdUnits=0;
-  const lines=[];
+  const d=refs(),rate=rateFor(d);
+  let subtotal=0,specialDiscount=0,tierDiscount=0,routineDiscount=0,spUnits=0,stdUnits=0,rUnits=0;
+  const lines=[],rlines=[];
   cart.forEach((q,id)=>{const p=byId.get(id);const list=p.price*q;let total,kind;
     if(isSp(p)){total=p.sp*q;kind='special';specialDiscount+=list-total;spUnits+=q;}
     else{total=at(list,rate);kind='tier';tierDiscount+=list-total;stdUnits+=q;}
     subtotal+=list;lines.push({id,qty:q,kind,list,total,saving:list-total});});
-  const discount=specialDiscount+tierDiscount;
-  return{units:u,rate,subtotal,specialDiscount,tierDiscount,discount,total:subtotal-discount,spUnits,stdUnits,lines,freeShipping:subtotal>=FREE_SHIP};
+  rcart.forEach((q,i)=>{const b=routineCalc(i);const list=b.list*q,total=b.now*q;subtotal+=list;routineDiscount+=list-total;rUnits+=q;rlines.push({idx:i,qty:q,list,total,saving:list-total});});
+  const discount=specialDiscount+tierDiscount+routineDiscount;
+  return{refs:d,units:units(),rate,subtotal,specialDiscount,tierDiscount,routineDiscount,discount,total:subtotal-discount,spUnits,stdUnits,rUnits,lines,rlines,freeShipping:subtotal>=FREE_SHIP};
 }
 function offerFor(p){
   if(isSp(p))return{kind:'special',now:p.sp,save:p.price-p.sp};
-  const u=units();const r=cart.has(p.id)?rateFor(u):rateFor(u+1);
+  const d=refs();const r=cart.has(p.id)?rateFor(d):rateFor(d+1);
   return{kind:'tier',rate:r,now:at(p.price,r),save:p.price-at(p.price,r),max:p.price-at(p.price,20)};
 }
-function bundleCalc(ids){const ps=ids.map(id=>byId.get(id)).filter(Boolean);let list=0,now=0;ps.forEach(p=>{list+=p.price;now+=isSp(p)?p.sp:at(p.price,20)});return{ps,list,now,save:list-now,pct:list?Math.floor((list-now)*100/list):0};}
 
 /* ---------- compte à rebours (heure de Tunis) ---------- */
-const START=Date.UTC(2026,10,21,9,0,0), END=Date.UTC(2026,10,27,22,59,59);
-function remaining(){const now=Date.now();const until=now<START?START:END;let s=Math.max(0,Math.floor((until-now)/1000));const d=Math.floor(s/86400);s%=86400;const h=Math.floor(s/3600);s%=3600;return{d,h,m:Math.floor(s/60),s:s%60,started:now>=START,ended:now>END};}
+const END=Date.UTC(2026,10,30,22,59,59); // 30/11/2026 23:59:59 heure de Tunis
+function remaining(){const now=Date.now();let s=Math.max(0,Math.floor((END-now)/1000));const d=Math.floor(s/86400);s%=86400;const h=Math.floor(s/3600);s%=3600;return{d,h,m:Math.floor(s/60),s:s%60,ended:now>END};}
 const pad=n=>String(n).padStart(2,'0');
 function initCountdowns(){$$('[data-countdown]').forEach(el=>{['d','h','m','s'].forEach((k,i)=>{const u=document.createElement('div');u.className='u';u.innerHTML=`<b data-k="${k}">00</b><small>${['jours','h','min','s'][i]}</small>`;el.appendChild(u)})});}
-function tick(){const r=remaining();$$('[data-k]').forEach(b=>{b.textContent=pad(r[b.dataset.k])});const hc=$('#headCount');if(hc)hc.textContent=r.ended?'Terminée':`${r.d} j ${pad(r.h)} h ${pad(r.m)} min`;const hl=$('#headLbl');if(hl)hl.textContent=r.ended?'Offre':r.started?'Fin de l’offre dans':'Ouverture dans';$$('.count .lbl').forEach(x=>x.textContent=r.ended?'Simulation terminée':r.started?'Fin dans':'Ouverture dans');}
+function tick(){const r=remaining();$$('[data-k]').forEach(b=>{b.textContent=pad(r[b.dataset.k])});const hc=$('#headCount');if(hc)hc.textContent=r.ended?'Terminée':`${r.d} j ${pad(r.h)} h ${pad(r.m)} min ${pad(r.s)} s`;const hl=$('#headLbl');if(hl)hl.textContent=r.ended?'Offre':'Fin de l’offre dans';$$('.count .lbl').forEach(x=>x.textContent=r.ended?'Simulation terminée':'Fin de l’offre dans');}
 
 /* ---------- navigation ---------- */
 const BF_HASHES=['#black-friday','#offre-speciale','#paliers','#routines','#incontournables','#boutique'];
@@ -777,10 +789,10 @@ function showBF(target){clearTimeout(popupTimer);document.body.classList.add('in
 function enterBF(target){const c=$('#curtain');c.classList.remove('out');void c.offsetWidth;c.classList.add('in');setTimeout(()=>{showBF(target);c.classList.remove('in');c.classList.add('out');setTimeout(()=>{c.classList.remove('out');c.style.transition='none';c.style.transform='translateY(100%)';void c.offsetWidth;c.style.transition='';c.style.transform='';},850)},900);}
 
 /* ---------- cartes ---------- */
-function badgesHTML(p){const sp=isSp(p);const left=p.maxQty;const tag=sp?'<span class="b-sp">Offre spéciale</span>':p.best?'<span class="b-best">Best-seller</span>':'<span></span>';const low=left<=3?`<span class="b-low">Plus que ${left}</span>`:'';return`<div class="badges">${tag}${low}</div>`;}
+function badgesHTML(p){const sp=isSp(p);const left=p.maxQty;const tag=sp?'<span class="b-sp">Prix choc</span>':p.best?'<span class="b-best">Best-seller</span>':'<span></span>';const low=left<=3?`<span class="b-low">Plus que ${left}</span>`:'';return`<div class="badges">${tag}${low}</div>`;}
 function infoHTML(p){
-  const inCart=cart.get(p.id)||0, full=inCart>=p.maxQty, o=offerFor(p);
-  const hint=o.kind==='special'?'Prix spécial Black Friday':o.rate>=20?'Meilleur palier atteint':`Jusqu’à ${fmt(o.max)} dès 3 articles`;
+  const inCart=cart.get(p.id)||0, full=used(p.id)>=p.maxQty, o=offerFor(p);
+  const hint=o.kind==='special'?'Prix choc Black Friday':o.rate>=20?'Meilleur palier atteint':`Jusqu’à ${fmt(o.max)} dès 3 produits`;
   return `<div class="info"><div class="brand">${esc(p.brand)}</div><h3>${esc(p.name)}</h3><div class="vol">${esc(p.volume)}</div>
     <div class="price"><span class="now">${fmt(o.now)}</span><s>${fmt(p.price)}</s></div>
     <div class="save"><span class="s-d">Vous économisez</span><span class="s-m">Économisez</span> <b>${fmt(o.save)}</b></div>
@@ -791,14 +803,14 @@ function cardHTML(p){return `<article class="card${isSp(p)?' is-sp':''}" data-id
 function refreshCards(){$$('.card[data-id]').forEach(c=>{const p=byId.get(+c.dataset.id);const n=document.createElement('div');n.innerHTML=infoHTML(p);c.querySelector('.info').replaceWith(n.firstElementChild)});}
 
 /* ---------- paliers / panier ---------- */
-function renderTrack(){const u=units();$$('[data-track]').forEach(t=>{if(!t.children.length){t.innerHTML=RATES.map((r,i)=>`<div class="tb-seg"><i></i><span>${i===2?'3+':i+1} · −${r}%</span></div>`).join('')}[...t.children].forEach((s,i)=>s.classList.toggle('on',u>=i+1))});}
-function tierMsg(c){const u=c.units;
-  if(u===0)return HAS_SP?'Offre spéciale <em>−30 %</em> · paliers dès le 1<sup>er</sup> article':'Ajoutez 1 article : <em>−10 %</em> immédiat';
-  const scope=c.stdUnits?'':' sur le prochain article hors offre';
-  if(u===1)return `<em>−10 %</em> débloqué${scope} · +1 article = <em>−15 %</em>`;
-  if(u===2)return `<em>−15 %</em> débloqué${scope} · +1 article = <em>−20 %</em>`;
-  return c.stdUnits?'<em>−20 %</em> débloqué sur vos produits hors offre':'<em>−20 %</em> débloqué sur tout article hors offre';}
-function shortMsg(c){if(!c.units)return HAS_SP?'Jusqu’à <em>−30 %</em> · paliers jusqu’à −20 %':'Jusqu’à <em>−20 %</em> sur le panier';return `${c.units} article${c.units>1?'s':''} · économie <em>${fmt(c.discount)}</em>`;}
+function renderTrack(){const u=refs();$$('[data-track]').forEach(t=>{if(!t.children.length){t.innerHTML=RATES.map((r,i)=>`<div class="tb-seg"><i></i><span>${i===2?'3+':i+1} · −${r}%</span></div>`).join('')}[...t.children].forEach((s,i)=>s.classList.toggle('on',u>=i+1))});}
+function tierMsg(c){const d=c.refs;
+  if(d===0)return 'Ajoutez 1 produit : <em>−10 %</em> immédiat';
+  const scope=c.stdUnits?'':' sur le prochain produit hors prix choc';
+  if(d===1)return `<em>−10 %</em> débloqué${scope} · +1 produit différent = <em>−15 %</em>`;
+  if(d===2)return `<em>−15 %</em> débloqué${scope} · +1 produit différent = <em>−20 %</em>`;
+  return c.stdUnits?'<em>−20 %</em> débloqué sur vos produits hors prix choc':'<em>−20 %</em> débloqué sur tout produit hors prix choc';}
+function shortMsg(c){if(!c.units)return HAS_SP?'Prix choc <em>−30 %</em> · paliers jusqu’à −20 %':'Jusqu’à <em>−20 %</em> sur le panier';return `Vous économisez <em>${fmt(c.discount)}</em>`;}
 function render(){
   const c=calculate();
   $('#cartN').textContent=c.units;
@@ -807,12 +819,13 @@ function render(){
   $('#mCart').textContent=c.units?`Panier · ${fmt(c.total)}`:'Panier · 0';
   renderTrack();
   const body=$('#drBody');
-  if(!c.units){body.innerHTML=`<div class="empty"><b>Votre panier est vide</b>${HAS_SP?'Commencez par l’offre spéciale −30 % ou un produit au palier −10 %.':'Ajoutez un premier produit : −10 % immédiat.'}</div>${upsellHTML(c)}`;}
-  else{body.innerHTML=c.lines.map(l=>{const p=byId.get(l.id);const tag=l.kind==='special'?'<span class="ltag special">Offre spéciale</span>':`<span class="ltag">Palier −${c.rate} %</span>`;return`<div class="line"><div class="im"><img src="${esc(p.image)}" alt=""></div><div><div class="br">${esc(p.brand)}</div><div class="nm">${esc(p.name)}</div>${tag}<div class="qty"><button data-q="${l.id}" data-d="-1" aria-label="Retirer un">−</button><span>${l.qty}</span><button data-q="${l.id}" data-d="1" aria-label="Ajouter un" ${l.qty>=p.maxQty?'disabled':''}>+</button></div></div><div class="pr">${fmt(l.total)}<s>${fmt(l.list)}</s><small>−${fmt(l.saving)}</small></div></div>`}).join('')+upsellHTML(c);}
+  if(!c.units){body.innerHTML=`<div class="empty"><b>Votre panier est vide</b>${HAS_SP?'Commencez par un prix choc −30 % ou un produit au palier −10 %.':'Ajoutez un premier produit : −10 % immédiat.'}</div>${upsellHTML(c)}`;}
+  else{body.innerHTML=c.lines.map(l=>{const p=byId.get(l.id);const tag=l.kind==='special'?'<span class="ltag special">Prix choc −30 %</span>':`<span class="ltag">Palier −${c.rate} %</span>`;return`<div class="line"><div class="im"><img src="${esc(p.image)}" alt=""></div><div><div class="br">${esc(p.brand)}</div><div class="nm">${esc(p.name)}</div>${tag}<div class="qty"><button data-q="${l.id}" data-d="-1" aria-label="Retirer un">−</button><span>${l.qty}</span><button data-q="${l.id}" data-d="1" aria-label="Ajouter un" ${used(l.id)>=p.maxQty?'disabled':''}>+</button></div></div><div class="pr">${fmt(l.total)}<s>${fmt(l.list)}</s><small>−${fmt(l.saving)}</small></div></div>`}).join('')+c.rlines.map(l=>{const r=DATA.routines[l.idx];const b=routineCalc(l.idx);const room=b.ps.every(p=>used(p.id)<p.maxQty);return`<div class="line"><div class="im"><img src="${esc(b.ps[1]?b.ps[1].image:b.ps[0].image)}" alt=""></div><div><div class="br">Routine · 3 produits</div><div class="nm">${esc(r.title)}</div><span class="ltag rfix">Prix fixe Black Friday</span><div class="qty"><button data-rq="${l.idx}" data-d="-1" aria-label="Retirer une routine">−</button><span>${l.qty}</span><button data-rq="${l.idx}" data-d="1" aria-label="Ajouter une routine" ${room?'':'disabled'}>+</button></div></div><div class="pr">${fmt(l.total)}<s>${fmt(l.list)}</s><small>−${fmt(l.saving)}</small></div></div>`}).join('')+upsellHTML(c);}
   const left=Math.max(0,FREE_SHIP-c.subtotal);
   $('#drFoot').innerHTML=`<div class="row"><span>Prix boutique</span><span>${fmt(c.subtotal)}</span></div>
-   ${c.spUnits?`<div class="row disc sp"><span>Offre spéciale −30 %</span><span>−${fmt(c.specialDiscount)}</span></div>`:''}
-   ${c.stdUnits?`<div class="row disc"><span>Paliers (−${c.rate} % hors offre spéciale)</span><span>−${fmt(c.tierDiscount)}</span></div>`:''}
+   ${c.spUnits?`<div class="row disc sp"><span>Prix choc −30 %</span><span>−${fmt(c.specialDiscount)}</span></div>`:''}
+   ${c.stdUnits?`<div class="row disc"><span>Paliers (−${c.rate} % · ${c.refs} produit${c.refs>1?'s':''} différent${c.refs>1?'s':''})</span><span>−${fmt(c.tierDiscount)}</span></div>`:''}
+   ${c.rUnits?`<div class="row disc"><span>Routines à prix fixe</span><span>−${fmt(c.routineDiscount)}</span></div>`:''}
    <div class="row tot"><span>Total produits</span><span>${fmt(c.total)}</span></div>
    ${c.discount?`<div class="saved">Vous économisez <b>${fmt(c.discount)}</b></div>`:''}
    <div class="ship">${c.freeShipping?'Livraison offerte débloquée':`Plus que <b>${fmt(left)}</b> pour la livraison offerte (dès 150 TND d’achat)`}<div class="bar"><i style="width:${Math.min(100,c.subtotal/FREE_SHIP*100)}%"></i></div></div>
@@ -821,11 +834,11 @@ function render(){
   window.KBBF.last=c;
 }
 function upsellHTML(c){
-  if(c.units>=3&&c.freeShipping)return'';
-  const pool=DATA.upsell.map(id=>byId.get(id)).filter(p=>p&&!cart.has(p.id)&&p.maxQty>0).slice(0,3);
+  if(c.refs>=3&&c.freeShipping)return'';
+  const pool=DATA.upsell.map(id=>byId.get(id)).filter(p=>p&&!cart.has(p.id)&&used(p.id)<p.maxQty).slice(0,3);
   if(!pool.length)return'';
-  const need=3-c.units;
-  const title=c.units<3?(c.units===0?'Pour commencer, petits prix :':`Encore ${need} article${need>1?'s':''} pour −20 % hors offre spéciale :`):'Pour la livraison offerte :';
+  const need=3-c.refs;
+  const title=c.refs<3?(c.units===0?'Pour commencer, petits prix :':`Encore ${need} produit${need>1?'s':''} différent${need>1?'s':''} pour −20 % :`):'Pour la livraison offerte :';
   return`<div class="upsell"><h4>${title}</h4><div class="ups">${pool.map(p=>{const o=offerFor(p);return`<button data-add="${p.id}"><img src="${esc(p.image)}" alt=""><small>${esc(p.name)}</small><b>${fmt(o.now)}</b><em>−${fmt(o.save)}</em></button>`}).join('')}</div></div>`;
 }
 
@@ -834,7 +847,7 @@ const spList=()=>[...SP].map(id=>byId.get(id)).sort((a,b)=>(b.best-a.best)||((b.
 let spCat='', spShown=matchMedia('(max-width:760px)').matches?8:12;
 function renderSpChips(){const L=spList();const counts={},names={};L.forEach(p=>{counts[p.cat]=(counts[p.cat]||0)+1;names[p.cat]=p.catName});const order=Object.keys(counts).sort((a,b)=>counts[b]-counts[a]);
   $('#spChips').innerHTML=`<button class="chip gold on" data-spcat="">Toutes <small>${L.length}</small></button>`+order.map(k=>`<button class="chip gold" data-spcat="${esc(k)}">${esc(names[k])} <small>${counts[k]}</small></button>`).join('');}
-function renderSp(){const L=spList().filter(p=>!spCat||p.cat===spCat);$('#spGrid').innerHTML=L.slice(0,spShown).map(cardHTML).join('');const more=$('#spMore');more.hidden=spShown>=L.length;more.textContent=`Voir les ${L.length} offres −30 %`;}
+function renderSp(){const L=spList().filter(p=>!spCat||p.cat===spCat);$('#spGrid').innerHTML=L.slice(0,spShown).map(cardHTML).join('');const more=$('#spMore');more.hidden=spShown>=L.length;more.textContent=`Voir les ${L.length} prix choc`;}
 
 /* ---------- boutique ---------- */
 let cat='', q='', sort='sel', shown=24;
@@ -844,12 +857,14 @@ function filtered(){let L=P.filter(p=>(!cat||(cat==='__sp'?isSp(p):p.cat===cat))
   if(sort==='asc')L.sort((a,b)=>effPrice(a)-effPrice(b));else if(sort==='desc')L.sort((a,b)=>effPrice(b)-effPrice(a));else if(sort==='brand')L.sort((a,b)=>a.brand.localeCompare(b.brand)||a.name.localeCompare(b.name));else if(sort==='save')L.sort((a,b)=>maxSave(b)-maxSave(a));else L.sort((a,b)=>a.rank-b.rank);return L;}
 function renderShop(){const L=filtered();$('#grid').innerHTML=L.slice(0,shown).map(cardHTML).join('')||'<p class="empty" style="grid-column:1/-1"><b>Aucun résultat</b>Essayez une autre recherche.</p>';$('#countLine').textContent=`${Math.min(shown,L.length)} sur ${L.length} produits disponibles`;$('#more').hidden=shown>=L.length;}
 function renderChips(){const counts={},names={};P.forEach(p=>{counts[p.cat]=(counts[p.cat]||0)+1;names[p.cat]=p.catName});const order=Object.keys(counts).sort((a,b)=>counts[b]-counts[a]);
-  $('#chips').innerHTML=`<button class="chip on" data-cat="">Tout <small>${P.length}</small></button>`+(HAS_SP?`<button class="chip gold" data-cat="__sp">Offre spéciale −30 % <small>${SP.size}</small></button>`:'')+order.map(k=>`<button class="chip" data-cat="${esc(k)}">${esc(names[k])} <small>${counts[k]}</small></button>`).join('');}
+  $('#chips').innerHTML=`<button class="chip on" data-cat="">Tout <small>${P.length}</small></button>`+(HAS_SP?`<button class="chip gold" data-cat="__sp">Prix choc −30 % <small>${SP.size}</small></button>`:'')+order.map(k=>`<button class="chip" data-cat="${esc(k)}">${esc(names[k])} <small>${counts[k]}</small></button>`).join('');}
 
 /* ---------- ajouts ---------- */
 let lastRate=0;
-function add(id,n=1,origin){const p=byId.get(id);if(!p)return false;const cur=cart.get(id)||0;const nq=Math.min(p.maxQty,cur+n);if(nq===cur){toast('Quantité maximale atteinte pour ce produit');return false;}cart.set(id,nq);afterChange(origin?{id}:null);return true;}
-function setQty(id,d){const p=byId.get(id);if(!p)return;const cur=cart.get(id)||0;const nq=Math.max(0,Math.min(p.maxQty,cur+d));if(nq===0)cart.delete(id);else cart.set(id,nq);afterChange();}
+function add(id,n=1,origin){const p=byId.get(id);if(!p)return false;const cur=cart.get(id)||0;const room=Math.max(0,p.maxQty-used(id));const nq=cur+Math.min(n,room);if(nq===cur){toast('Quantité maximale atteinte pour ce produit');return false;}cart.set(id,nq);afterChange(origin?{id}:null);return true;}
+function addRoutine(i,origin){const r=DATA.routines[i];if(!r)return false;const ps=r.ids.map(id=>byId.get(id));if(ps.some(p=>!p||used(p.id)>=p.maxQty)){toast('Quantité maximale atteinte pour un produit de cette routine');return false;}rcart.set(i,(rcart.get(i)||0)+1);afterChange(null);if(origin)toast(`Routine ajoutée · vous économisez ${fmt(routineCalc(i).save)}`);return true;}
+function setRQty(i,d){const cur=rcart.get(i)||0;if(d>0){addRoutine(i);return;}if(cur<=1)rcart.delete(i);else rcart.set(i,cur-1);afterChange();}
+function setQty(id,d){const p=byId.get(id);if(!p)return;const cur=cart.get(id)||0;const nq=Math.max(0,Math.min(cur+Math.max(0,p.maxQty-used(id)),cur+d));if(nq===0)cart.delete(id);else cart.set(id,nq);afterChange();}
 function afterChange(origin){const c=calculate();render();refreshCards();$('#cartBtn').classList.remove('bump');void $('#cartBtn').offsetWidth;$('#cartBtn').classList.add('bump');
   if(c.rate>lastRate&&(c.stdUnits||c.rate===20)){celebrate(c);}else if(origin){const p=byId.get(origin.id);toast(p&&isSp(p)?`Ajouté · vous économisez ${fmt(p.price-p.sp)}`:'Ajouté au panier');}
   lastRate=c.rate;}
@@ -860,7 +875,7 @@ function fly(img){if(!img||matchMedia('(prefers-reduced-motion: reduce)').matche
 /* ---------- tiroir / modal / toast ---------- */
 function openCart(){$('#drawer').classList.add('on');$('#drawer').setAttribute('aria-hidden','false');$('#scrim').classList.add('on');}
 function closeCart(){$('#drawer').classList.remove('on');$('#drawer').setAttribute('aria-hidden','true');$('#scrim').classList.remove('on');}
-function checkout(){const c=calculate();if(!c.units)return;closeCart();$('#modalBox').innerHTML=`<div class="kicker">Récapitulatif simulé</div><h3 id="mTitle">Votre Black Friday</h3><p>${c.units} article${c.units>1?'s':''}${c.spUnits?` · ${c.spUnits} en offre spéciale`:''}${c.stdUnits?` · palier −${c.rate} %`:''}</p><div class="big">${fmt(c.total)}</div><p>Au lieu de <s>${fmt(c.subtotal)}</s> · vous économisez <b style="color:var(--rose-d)">${fmt(c.discount)}</b>${c.freeShipping?' · livraison offerte':''}</p><p style="font-size:13px;margin-top:12px">Préproduction : panier simulé uniquement. Aucune commande, donnée client, remise ou paiement n’est envoyé au site.</p><button class="btn btn-rose" id="modalContinue">Continuer mes achats</button>`;$('#modal').hidden=false;$('#modalContinue').focus();}
+function checkout(){const c=calculate();if(!c.units)return;closeCart();$('#modalBox').innerHTML=`<div class="kicker">Récapitulatif simulé</div><h3 id="mTitle">Vous économisez ${fmt(c.discount)}</h3><p>${c.units} produit${c.units>1?'s':''}${c.spUnits?` · ${c.spUnits} à prix choc`:''}${c.stdUnits?` · palier −${c.rate} %`:''}${c.rUnits?` · ${c.rUnits} routine${c.rUnits>1?'s':''}`:''}</p><div class="big">${fmt(c.total)}</div><p>Au lieu de <s>${fmt(c.subtotal)}</s> · vous économisez <b style="color:var(--rose-d)">${fmt(c.discount)}</b>${c.freeShipping?' · livraison offerte':''}</p><p style="font-size:13px;margin-top:12px">Préproduction : panier simulé uniquement. Aucune commande, donnée client, remise ou paiement n’est envoyé au site.</p><button class="btn btn-rose" id="modalContinue">Continuer mes achats</button>`;$('#modal').hidden=false;$('#modalContinue').focus();}
 let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2300);}
 
 /* ---------- confettis ---------- */
@@ -881,17 +896,17 @@ function renderStatic(){
   if(!HAS_SP){$$('[data-sp-only]').forEach(e=>e.hidden=true);$('#offre-speciale').hidden=true;$('#heroCta').setAttribute('href','#boutique');$('#heroCta').textContent='Composer mon panier';}
   else{
     $('#spStatCount').textContent=SP.size;$('#spStatMax').textContent=fmt(maxSp);$('#spStatMin').textContent=fmt(minSp);
-    $('#spIntro').innerHTML=`${SP.size} références best-sellers et soins cultes passent à <strong>−30 %</strong>, prix déjà remisé et affiché. Dès qu’une référence est épuisée, elle quitte l’offre.`;
+    $('#spIntro').innerHTML=`Les prix choc du Black Friday : <strong>−30 %</strong> directement sur le prix, sans code. Jusqu’à <strong>${fmt(maxSp)}</strong> économisés sur un seul soin. Un produit épuisé quitte l’offre.`;
     renderSpChips();renderSp();
   }
-  $('#popSub').innerHTML=HAS_SP?`<strong>−30 %</strong> sur ${SP.size} références sélectionnées, jusqu’à <strong>${fmt(maxSp)}</strong> économisés sur un seul produit. Et jusqu’à <strong>−20 %</strong> sur le reste du panier.`:'Plus vous ajoutez, plus la remise grimpe : jusqu’à <strong>−20 %</strong> sur le panier.';
+  $('#popSub').innerHTML=HAS_SP?`Prix choc <strong>−30 %</strong> sur ${SP.size} produits : jusqu’à <strong>${fmt(maxSp)}</strong> économisés sur un seul produit. Et jusqu’à <strong>−20 %</strong> sur le reste du panier.`:'Plus vous ajoutez, plus la remise grimpe : jusqu’à <strong>−20 %</strong> sur le panier.';
   const best=(DATA.best||[]).map(id=>byId.get(id)).filter(Boolean);
   $('#bestGrid').innerHTML=best.map(cardHTML).join('');
   if(!best.length)$('#incontournables').hidden=true;
   if(!DATA.routines.length){$('#routines').hidden=true;$$('[data-routines-only]').forEach(e=>e.hidden=true);}
-  $('#routineGrid').innerHTML=DATA.routines.map((r,i)=>{const b=bundleCalc(r.ids);return`<article class="routine reveal"><span class="rsave">−${b.pct} %</span><div class="trio">${b.ps.map(p=>`<img src="${esc(p.image)}" alt="" loading="lazy">`).join('')}</div><h3>${esc(r.title)}</h3><div class="for">${esc(r.for)}</div><ul>${b.ps.map(p=>`<li><span>${isSp(p)?'<em>−30 %</em>':''}${esc(p.brand)} · ${esc(p.name)}</span><span>${fmt(isSp(p)?p.sp:at(p.price,20))}</span></li>`).join('')}</ul><div class="tot"><b>${fmt(b.now)}</b><s>${fmt(b.list)}</s></div><div class="rgain"><span>Vous économisez</span><b>${fmt(b.save)}</b></div><button class="btn btn-rose" data-routine="${i}">Ajouter la routine · −${fmt(b.save)}</button></article>`}).join('');
+  $('#routineGrid').innerHTML=DATA.routines.map((r,i)=>{const b=routineCalc(i);return`<article class="routine reveal"><span class="rsave">−${b.pct} %</span><div class="trio">${b.ps.map(p=>`<img src="${esc(p.image)}" alt="" loading="lazy">`).join('')}</div><h3>${esc(r.title)}</h3><div class="for">${esc(r.for)}</div><ul>${b.ps.map(p=>`<li><span>${esc(p.brand)} · ${esc(p.name)}</span><span>${fmt(p.price)}</span></li>`).join('')}</ul><div class="tot"><b>${fmt(b.now)}</b><s>${fmt(b.list)}</s></div><div class="rgain"><span>Vous économisez</span><b>${fmt(b.save)}</b></div><button class="btn btn-rose" data-routine="${i}">Ajouter · économisez ${fmt(b.save)}</button></article>`}).join('');
   const ex=bundleCalc(DATA.example);
-  if(ex.ps.length>=2){const nSp=ex.ps.filter(isSp).length;$('#example').innerHTML=`<div class="imgs">${ex.ps.map(p=>`<img src="${esc(p.image)}" alt="">`).join('')}</div><div>Exemple : ${ex.ps.map(p=>esc(p.name)+(isSp(p)?' (offre spéciale)':'')).join(' + ')}<br><s>${fmt(ex.list)}</s> → <b>${fmt(ex.now)}</b><span class="ex-save">−${fmt(ex.save)}</span>${nSp&&nSp<ex.ps.length?' · l’offre spéciale compte pour le palier −20 %':''}</div>`;}else{$('#example').hidden=true;}
+  if(ex.ps.length>=2){const nSp=ex.ps.filter(isSp).length;$('#example').innerHTML=`<div class="imgs">${ex.ps.map(p=>`<img src="${esc(p.image)}" alt="">`).join('')}</div><div>Exemple : ${ex.ps.map(p=>esc(p.name)+(isSp(p)?' (prix choc)':'')).join(' + ')}<br><s>${fmt(ex.list)}</s> → <b>${fmt(ex.now)}</b><span class="ex-save">−${fmt(ex.save)}</span>${nSp&&nSp<ex.ps.length?' · le prix choc compte pour le palier −20 %':''}</div>`;}else{$('#example').hidden=true;}
   $('#shopIntro').textContent=`${P.length} produits disponibles, du nettoyant au soin capillaire. Prix barré = prix boutique ; l’économie affichée suit votre panier.`;
 }
 
@@ -899,7 +914,8 @@ function renderStatic(){
 document.addEventListener('click',e=>{
   const a=e.target.closest('[data-add]');if(a&&!a.disabled){const card=a.closest('.card');if(add(+a.dataset.add,1,true))fly(card?card.querySelector('.tile img'):a.querySelector('img'));return;}
   const qb=e.target.closest('[data-q]');if(qb){setQty(+qb.dataset.q,+qb.dataset.d);return;}
-  const rt=e.target.closest('[data-routine]');if(rt){const r=DATA.routines[+rt.dataset.routine];const ps=r.ids.map(id=>byId.get(id));if(ps.some(p=>!p||(cart.get(p.id)||0)>=p.maxQty)){toast('Quantité maximale atteinte pour un produit de cette routine');return;}ps.forEach(p=>cart.set(p.id,(cart.get(p.id)||0)+1));afterChange({id:ps[0].id});fly(rt.closest('.routine').querySelector('.trio img:nth-child(2)'));setTimeout(openCart,650);return;}
+  const rq=e.target.closest('[data-rq]');if(rq&&!rq.disabled){setRQty(+rq.dataset.rq,+rq.dataset.d);return;}
+  const rt=e.target.closest('[data-routine]');if(rt){if(addRoutine(+rt.dataset.routine,true)){fly(rt.closest('.routine').querySelector('.trio img:nth-child(2)'));setTimeout(openCart,650);}return;}
   const sc=e.target.closest('[data-spcat]');if(sc){$$('[data-spcat]').forEach(c=>c.classList.toggle('on',c===sc));spCat=sc.dataset.spcat;renderSp();return;}
   const ch=e.target.closest('[data-cat]');if(ch){$$('[data-cat]').forEach(c=>c.classList.toggle('on',c===ch));cat=ch.dataset.cat;shown=24;renderShop();return;}
   if(e.target.closest('#checkout')){checkout();return;}
@@ -920,7 +936,7 @@ $('#spMore').addEventListener('click',()=>{spShown=SP.size;renderSp()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('#modal').hidden)$('#modal').hidden=true;else if($('#drawer').classList.contains('on'))closeCart();else if(!$('#popup').hidden)closePopup();}});
 window.addEventListener('hashchange',()=>{if(BF_HASHES.includes(location.hash)&&!document.body.classList.contains('in-bf'))showBF(location.hash)});
 
-window.KBBF={products:()=>P.slice(),special:()=>[...SP],calculate,offerFor,bundleCalc,rates:RATES,routines:()=>DATA.routines.map(r=>r.ids.slice()),add:(id,n)=>add(id,n),setQty,clear:()=>{cart.clear();lastRate=0;render();refreshCards();},cart:()=>Object.fromEntries(cart),snapshot:DATA.collectedAt};
+window.KBBF={products:()=>P.slice(),special:()=>[...SP],calculate,offerFor,bundleCalc,routineCalc,rates:RATES,endsAt:END,routines:()=>DATA.routines.map(r=>r.ids.slice()),add:(id,n)=>add(id,n),addRoutine:i=>addRoutine(i),setQty,setRQty,clear:()=>{cart.clear();rcart.clear();lastRate=0;render();refreshCards();},cart:()=>Object.fromEntries(cart),rcart:()=>Object.fromEntries(rcart),snapshot:DATA.collectedAt};
 initCountdowns();tick();setInterval(tick,1000);
 renderChips();renderStatic();renderShop();render();
 if(BF_HASHES.includes(location.hash)){showBF(location.hash)}else{popupTimer=setTimeout(openPopup,1200)}
