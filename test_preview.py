@@ -144,7 +144,7 @@ with sync_playwright() as p:
     assert desktop.locator(".sp-stats, #spStatCount, #spStatMax, #spStatMin, [data-sp-count]").count() == 0
     assert desktop.locator("#spChips small, [data-cat='__sp'] small").count() == 0, "compteur sur les filtres prix choc"
     # Aucun vocabulaire qui laisse penser à une liste d'invendus ni ancienne période.
-    banned = re.findall(r"offre sp[ée]ciale|s[ée]lection|invendu|21\s*(?:—|au)\s*27|27 nov", visible, re.I)
+    banned = re.findall(r"offre sp[ée]ciale|s[ée]lection|invendu|21\s*(?:—|au)\s*27|27 nov|z[ée]ro code|sans code|code promo|palier|skin match|hors prix choc|catalogue public", visible, re.I)
     assert not banned, banned
 
     std = [x["id"] for x in desktop.evaluate("window.KBBF.products()") if x["id"] not in sp]
@@ -233,7 +233,7 @@ with sync_playwright() as p:
     desktop.evaluate("([a,b]) => {window.KBBF.clear();window.KBBF.add(a,1);window.KBBF.add(b,1)}", [sp[0], std[0]])
     desktop.locator("#cartBtn").click()
     foot = desktop.locator("#drFoot").inner_text().lower()
-    assert "prix choc" in foot and "paliers" in foot and "simul" in foot
+    assert "prix choc" in foot and "black friday −" in foot and "préproduction" in foot
     desktop.locator("#checkout").click()
     assert desktop.locator("#modal").is_visible()
     assert "aucune commande" in desktop.locator("#modal").inner_text().lower()
@@ -285,9 +285,9 @@ with sync_playwright() as p:
     browser.close()
 
 print(
-    f"PASS V2.4 | stock={len(data['products'])} | −30 % affichées={len(data['special'])}/55 | packs={len(data['routines'])}/5 | "
+    f"PASS V2.5 | stock={len(data['products'])} | −30 % affichées={len(data['special'])}/55 | packs={len(data['routines'])}/5 | "
     "prix spécial floor 70 % | non-cumul paliers | rupture pack/spécial masquée | fail-closed build+fraîcheur | "
     "aucun % sur cartes | paliers par produits différents | routines −20 % hors palier | fin 30/11 | "
-    "aucun comptage −30 % | packs −20 % exact | bannière −30 % | ordre principe>routines>prix choc>Skin Match | Skin Match 40 profils | "
+    "textes humains sans code ni palier | aucun comptage −30 % | packs −20 % exact | bannière −30 % | ordre principe>routines>prix choc>Skin Match | Skin Match 40 profils | "
     "aucun appel API | responsive 360/375/390/768"
 )
