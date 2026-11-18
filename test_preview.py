@@ -96,10 +96,17 @@ with sync_playwright() as p:
     assert desktop.locator("body").evaluate("e => e.classList.contains('sync-ok')")
     assert "Préproduction" in desktop.locator("#previewRibbon").inner_text()
     assert desktop.locator("#popup").is_visible(timeout=5000)
+    bar = desktop.locator("#homeBar").inner_text()
+    assert "−30 %" in bar and "−20" not in bar, bar
     desktop.locator("#popCta").click()
     desktop.wait_for_timeout(1300)
     assert desktop.locator("#bfView").is_visible()
 
+    # Ordre : principe des réductions → routines → prix choc −30 % → Skin Match → boutique.
+    order = desktop.evaluate("[...document.querySelectorAll('#bfView > section[id], #bfView > div[id]')].map(e=>e.id)")
+    assert order.index("paliers") < order.index("routines") < order.index("offre-speciale") < order.index("skin-match") < order.index("boutique"), order
+    how = desktop.locator("#paliers").inner_text()
+    assert all(k in how for k in ("−30 %", "−10 %", "−15 %", "−20 %", "150 TND")), how
     sp = desktop.evaluate("window.KBBF.special()")
     assert len(sp) == len(data["special"]) > 0
     assert desktop.locator("#offre-speciale").is_visible()
@@ -178,6 +185,34 @@ with sync_playwright() as p:
         assert c["refs"] == 1 and c["rate"] == 10 and c["tierDiscount"] == exp_line, "routine comptée dans le palier"
         assert c["total"] == r0["now"] + round(by_id[std[5]]["price"] * 90 / 100), "prix de routine modifié"
         desktop.evaluate("window.KBBF.clear()")
+    # Skin Match : 3 questions → routine disponible, catégories distinctes, prix recalculé, ajout au panier.
+    prods = {x["id"]: x for x in desktop.evaluate("window.KBBF.products()")}
+    for skin in ("grasse", "seche", "sensible", "normale"):
+        for goal in ("pores", "eclat", "hydra", "apaise", "age"):
+            for size in ("3", "4"):
+                ids = desktop.evaluate("a => window.KBBF.skinMatch(a)", {"skin": skin, "goal": goal, "size": size})
+                assert 2 <= len(ids) <= int(size) and len(set(ids)) == len(ids), (skin, goal, size, ids)
+                assert all(i in prods and prods[i]["maxQty"] > 0 for i in ids)
+                assert len({prods[i]["cat"] for i in ids}) == len(ids), "Skin Match : deux produits de même étape"
+                c = desktop.evaluate("ids => window.KBBF.smCalc(ids)", ids)
+                rate = 20 if len(ids) >= 3 else 15
+                exp_now = sum(by_id[i]["sp"] if i in sp else round(by_id[i]["price"] * (100 - rate) / 100) for i in ids)
+                assert c["now"] == exp_now and c["save"] == c["list"] - c["now"] > 0, (ids, c, exp_now)
+    desktop.evaluate("window.KBBF.clear()")
+    desktop.evaluate("document.querySelector('#skin-match').scrollIntoView()")
+    for k in range(3):
+        desktop.locator("#smBox .sm-opt").first.click()
+    assert desktop.locator("#smBox .sm-list li").count() >= 2
+    shown_ids = [int(x) for x in desktop.locator("#smBox").get_attribute("data-ids").split(",")]
+    gain = desktop.locator("#smBox .sm-gain b").inner_text()
+    assert gain in desktop.locator("[data-smadd]").inner_text() and "%" not in desktop.locator("[data-smadd]").inner_text()
+    desktop.locator("[data-smadd]").click()
+    desktop.wait_for_timeout(900)
+    assert set(map(int, desktop.evaluate("Object.keys(window.KBBF.cart())"))) == set(shown_ids)
+    after = desktop.evaluate("window.KBBF.calculate()")
+    assert after["total"] == desktop.evaluate("ids => window.KBBF.smCalc(ids)", shown_ids)["now"], "Skin Match ≠ panier"
+    desktop.keyboard.press("Escape")
+    desktop.evaluate("window.KBBF.clear()")
     # Stock : impossible de dépasser la quantité publique.
     desktop.evaluate("window.KBBF.clear()")
     target = by_id[sp[0]]
@@ -206,7 +241,7 @@ with sync_playwright() as p:
         m.wait_for_timeout(2300)
         assert m.locator("#bfView").is_visible()
         m.evaluate("document.querySelectorAll('.reveal').forEach(e=>e.classList.add('vis'))")
-        for sel in ["#offre-speciale", "#paliers", "#boutique"]:
+        for sel in ["#offre-speciale", "#paliers", "#routines", "#skin-match", "#boutique"]:
             m.evaluate(f"document.querySelector('{sel}').scrollIntoView()")
             m.wait_for_timeout(150)
             assert m.evaluate("document.documentElement.scrollWidth <= window.innerWidth"), f"débordement horizontal {width}px {sel}"
@@ -217,6 +252,11 @@ with sync_playwright() as p:
         assert clipped == 0, f"carte tronquée à {width}px"
         if width < 760:
             assert m.locator("#mbar").is_visible()
+        m.evaluate("document.querySelector('#skin-match').scrollIntoView()")
+        for k in range(3):
+            m.locator("#smBox .sm-opt").nth(k % 2).click()
+        assert m.evaluate("[...document.querySelectorAll('#smBox, #smBox .sm-list li, #smBox .sm-gain, #smBox .sm-cta')].every(e => e.getBoundingClientRect().right <= innerWidth + 1 && e.scrollWidth <= e.clientWidth + 1)"), f"Skin Match tronqué à {width}px"
+        m.evaluate("window.KBBF.clear()")
         m.evaluate("([a,b]) => {window.KBBF.add(a,1);window.KBBF.add(b,1)}", [sp[0], std[0]])
         m.locator("#mCart" if width < 760 else "#cartBtn").click()
         m.wait_for_timeout(600)
@@ -234,8 +274,9 @@ with sync_playwright() as p:
     browser.close()
 
 print(
-    f"PASS V2.2 | stock={len(data['products'])} | −30 % affichées={len(data['special'])}/55 | packs={len(data['routines'])}/5 | "
+    f"PASS V2.3 | stock={len(data['products'])} | −30 % affichées={len(data['special'])}/55 | packs={len(data['routines'])}/5 | "
     "prix spécial floor 70 % | non-cumul paliers | rupture pack/spécial masquée | fail-closed build+fraîcheur | "
     "aucun % sur cartes | paliers par produits différents | routines prix fixe hors palier | fin 30/11 | "
+    "bannière −30 % | ordre principe>routines>prix choc>Skin Match | Skin Match 40 profils | "
     "aucun appel API | responsive 360/375/390/768"
 )
