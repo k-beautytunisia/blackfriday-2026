@@ -112,6 +112,17 @@ with sync_playwright() as p:
     assert desktop.locator(".card .save").count() >= len(sp)
     assert all("TND" in t for t in desktop.locator(".card .save").all_inner_texts())
     assert desktop.locator(".routine").count() == len(data["routines"])
+    # Routines : pastille en %, économie en TND mise en avant et reprise dans le bouton.
+    import re
+    for k in range(desktop.locator(".routine").count()):
+        card = desktop.locator(".routine").nth(k)
+        assert re.fullmatch(r"−\d{1,2} %", card.locator(".rsave").inner_text().strip()), card.locator(".rsave").inner_text()
+        gain = card.locator(".rgain b").inner_text().strip()
+        assert gain.endswith("TND") and gain in card.locator("[data-routine]").inner_text()
+        assert card.evaluate("c => [...c.querySelectorAll('.rgain, .rgain span, [data-routine]')].every(e => e.scrollWidth <= e.clientWidth + 1)"), "routine tronquée"
+    # Le mot « stock » ne doit apparaître qu’une fois dans la page (mention de l’offre −30 %).
+    visible = desktop.evaluate("document.body.innerText")
+    assert len(re.findall("stock", visible, re.I)) <= 1, re.findall(r".{0,40}stock.{0,20}", visible, re.I)
 
     std = [x["id"] for x in desktop.evaluate("window.KBBF.products()") if x["id"] not in sp]
     cases = [

@@ -299,7 +299,11 @@ body.sync-error > :not(#syncError){display:none!important}
 .routine .tot{display:flex;align-items:baseline;gap:10px;margin:4px 0 14px;flex-wrap:wrap}
 .routine .tot b{font-family:var(--serif);font-size:34px;color:var(--rose-d);font-weight:700;white-space:nowrap}
 .routine .tot s{color:var(--ink2);white-space:nowrap}
-.routine .btn{margin-top:auto}
+.routine .btn{margin-top:auto;white-space:nowrap;font-size:15px;padding-left:14px;padding-right:14px}
+.routine .rsave{font-size:15px;padding:.45em .9em}
+.routine .rgain{display:flex;flex-direction:column;align-items:flex-start;gap:3px;margin:-4px 0 16px;padding:11px 15px;border-radius:16px;background:linear-gradient(135deg,#fff4dc,#f3d9a8);border:1px solid #e6c68e;color:#7a5520;font-weight:600;font-size:14px}
+.routine .rgain span{white-space:nowrap;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase}
+.routine .rgain b{font-family:var(--serif);font-size:30px;line-height:1;color:var(--rose-d);white-space:nowrap}
 
 /* boutique */
 .tools{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:20px}
@@ -505,6 +509,8 @@ body.sync-error > :not(#syncError){display:none!important}
   .routine{scroll-snap-align:start;padding:18px}
   .routine .trio{height:160px}.routine .trio img{height:142px}.routine .trio img:nth-child(2){height:154px}
   .routine h3{font-size:26px}
+  .routine .btn{font-size:14px;padding-left:12px;padding-right:12px;white-space:nowrap}
+  .routine .rgain{padding:10px 13px}.routine .rgain b{font-size:27px}
   .tools{gap:8px}
   .search{flex:1 1 100%}
   .sort{flex:1 1 100%}
@@ -537,7 +543,7 @@ body.sync-error > :not(#syncError){display:none!important}
 </style>
 </head>
 <body>
-<div id="syncError" role="alert"><div><div class="kicker">K‑Beauty Tunisia · Préproduction</div><h1>Disponibilités en cours de vérification</h1><p>Le catalogue n’a pas été synchronisé récemment. Pour éviter de montrer un ancien prix ou un stock périmé, cette prévisualisation est momentanément désactivée.</p><p>Aucune commande ou remise réelle n’est possible ici.</p><a href="https://kbeauty-tunisia.com/">Consulter la boutique officielle</a></div></div>
+<div id="syncError" role="alert"><div><div class="kicker">K‑Beauty Tunisia · Préproduction</div><h1>Disponibilités en cours de vérification</h1><p>Le catalogue n’a pas été synchronisé récemment. Pour éviter d’afficher un prix ou une disponibilité dépassés, cette prévisualisation est momentanément désactivée.</p><p>Aucune commande ou remise réelle n’est possible ici.</p><a href="https://kbeauty-tunisia.com/">Consulter la boutique officielle</a></div></div>
 <div class="sim-pill" id="simPill">PRÉPROD · OFFRE SIMULÉE</div>
 
 <!-- ============ VUE 1 : SITE NORMAL (maquette) ============ -->
@@ -618,7 +624,7 @@ body.sync-error > :not(#syncError){display:none!important}
         <div class="count reveal" data-countdown><span class="lbl">Fin dans</span></div>
       </div>
       <div class="hero-art" id="heroArt">
-        <div class="seal"><svg viewBox="0 0 142 142" aria-hidden="true"><defs><path id="cp2" fill="none" d="M71,71 m-60,0 a60,60 0 1,1 120,0 a60,60 0 1,1 -120,0"/></defs><text font-size="10" letter-spacing="3.2" fill="#9b7a45" font-family="DM Sans" font-weight="700"><textPath href="#cp2">DANS LA LIMITE DU STOCK · BLACK FRIDAY · </textPath></text></svg><div><span>jusqu’à</span><b data-max>−30%</b></div></div>
+        <div class="seal"><svg viewBox="0 0 142 142" aria-hidden="true"><defs><path id="cp2" fill="none" d="M71,71 m-60,0 a60,60 0 1,1 120,0 a60,60 0 1,1 -120,0"/></defs><text font-size="10" letter-spacing="3.2" fill="#9b7a45" font-family="DM Sans" font-weight="700"><textPath href="#cp2">QUANTITÉS LIMITÉES · BLACK FRIDAY · </textPath></text></svg><div><span>jusqu’à</span><b data-max>−30%</b></div></div>
         __HERO_FLOATS__
       </div>
     </div>
@@ -635,7 +641,7 @@ body.sync-error > :not(#syncError){display:none!important}
           <p id="spIntro"></p>
         </div>
         <div class="sp-stats">
-          <div><b id="spStatCount">—</b><small>références en stock</small></div>
+          <div><b id="spStatCount">—</b><small>références à −30 %</small></div>
           <div><b id="spStatMax">—</b><small>économisés au maximum sur un produit</small></div>
           <div><b id="spStatMin">—</b><small>premier prix spécial</small></div>
         </div>
@@ -650,7 +656,7 @@ body.sync-error > :not(#syncError){display:none!important}
   <section class="sec" id="paliers">
     <div class="sec-h reveal"><h2>Deux façons d’économiser.<br><span class="rose-text">Zéro code à saisir.</span></h2><p>L’offre spéciale et les paliers s’appliquent automatiquement. Plus votre panier grandit, plus vous économisez sur les produits hors offre spéciale.</p></div>
     <div class="tiers">
-      <div class="tier sp reveal" data-sp-only><span class="tag">Prix spécial</span><div class="q">Sélection</div><div class="pct">−30%</div><p>Sur <span data-sp-count>55</span> références, dans la limite du stock.</p></div>
+      <div class="tier sp reveal" data-sp-only><span class="tag">Prix spécial</span><div class="q">Sélection</div><div class="pct">−30%</div><p>Sur <span data-sp-count>55</span> références sélectionnées, prix déjà remisé.</p></div>
       <div class="tier reveal"><div class="q">1 article</div><div class="pct">−10%</div><p>Dès le premier produit.</p></div>
       <div class="tier reveal"><div class="q">2 articles</div><div class="pct">−15%</div><p>Sur vos produits hors offre spéciale.</p></div>
       <div class="tier max reveal"><span class="tag">Meilleur palier</span><div class="q">3 articles et +</div><div class="pct">−20%</div><p>Sur tous vos produits hors offre spéciale.</p></div>
@@ -659,7 +665,7 @@ body.sync-error > :not(#syncError){display:none!important}
   </section>
 
   <section class="sec" id="routines">
-    <div class="sec-h reveal"><h2>Routines prêtes,<br><span class="rose-text">économie maximale.</span></h2><p>Trois produits complémentaires en un clic : le meilleur palier est débloqué et l’offre spéciale reste appliquée. Une routine n’est proposée que si tous ses produits sont en stock.</p></div>
+    <div class="sec-h reveal"><h2>Routines prêtes,<br><span class="rose-text">économie maximale.</span></h2><p>Trois produits complémentaires en un clic : le meilleur palier est débloqué et l’offre spéciale reste appliquée. Une routine n’est proposée que si tous ses produits sont disponibles.</p></div>
     <div class="routines" id="routineGrid"></div>
   </section>
 
@@ -669,7 +675,7 @@ body.sync-error > :not(#syncError){display:none!important}
   </section>
 
   <section class="sec" id="boutique">
-    <div class="sec-h reveal"><h2>Toute la boutique<br><span class="rose-text">en stock.</span></h2><p id="shopIntro"></p></div>
+    <div class="sec-h reveal"><h2>Toute la boutique<br><span class="rose-text">disponible.</span></h2><p id="shopIntro"></p></div>
     <div class="tools">
       <div class="chips" id="chips"></div>
       <label class="search"><span aria-hidden="true">⌕</span><span class="sr">Rechercher</span><input id="search" type="search" placeholder="Rechercher une marque, un produit…" autocomplete="off"></label>
@@ -683,7 +689,7 @@ body.sync-error > :not(#syncError){display:none!important}
   <section class="final">
     <div class="kicker">21 — 27 novembre</div>
     <h2>Les meilleures offres <span class="rose-text">partent en premier.</span></h2>
-    <p>Offre spéciale dans la limite du stock disponible · paliers jusqu’à −20 % sur le reste du panier.</p>
+    <p>Offre spéciale −30 % sur une sélection · paliers jusqu’à −20 % sur le reste du panier.</p>
     <div class="ctas"><button class="btn btn-rose shine" id="finalCart">Voir mon panier</button><a class="btn btn-ghost" href="#offre-speciale" data-sp-only>Revoir l’offre −30 %</a></div>
   </section>
 </main>
@@ -711,7 +717,7 @@ const collectedMs=Date.parse(DATA.collectedAt);
 const ageMs=Date.now()-collectedMs;
 const fresh=Number.isFinite(collectedMs)&&ageMs>=-60000&&ageMs<=DATA.maxAgeMinutes*60*1000;
 const stamp=document.getElementById('syncStamp');
-if(stamp&&Number.isFinite(collectedMs))stamp.textContent=`Catalogue public actualisé ${new Date(collectedMs).toLocaleString('fr-TN',{timeZone:'Africa/Tunis'})} · prix/stock observés`;
+if(stamp&&Number.isFinite(collectedMs))stamp.textContent=`Catalogue public actualisé ${new Date(collectedMs).toLocaleString('fr-TN',{timeZone:'Africa/Tunis'})} · prix et disponibilités vérifiés`;
 if(!fresh){document.body.classList.add('sync-error');}
 else {document.body.classList.add('sync-ok');
 (function(){
@@ -750,7 +756,7 @@ function offerFor(p){
   const u=units();const r=cart.has(p.id)?rateFor(u):rateFor(u+1);
   return{kind:'tier',rate:r,now:at(p.price,r),save:p.price-at(p.price,r),max:p.price-at(p.price,20)};
 }
-function bundleCalc(ids){const ps=ids.map(id=>byId.get(id)).filter(Boolean);let list=0,now=0;ps.forEach(p=>{list+=p.price;now+=isSp(p)?p.sp:at(p.price,20)});return{ps,list,now,save:list-now};}
+function bundleCalc(ids){const ps=ids.map(id=>byId.get(id)).filter(Boolean);let list=0,now=0;ps.forEach(p=>{list+=p.price;now+=isSp(p)?p.sp:at(p.price,20)});return{ps,list,now,save:list-now,pct:list?Math.floor((list-now)*100/list):0};}
 
 /* ---------- compte à rebours (heure de Tunis) ---------- */
 const START=Date.UTC(2026,10,21,9,0,0), END=Date.UTC(2026,10,27,22,59,59);
@@ -774,12 +780,12 @@ function enterBF(target){const c=$('#curtain');c.classList.remove('out');void c.
 function badgesHTML(p){const sp=isSp(p);const left=p.maxQty;const tag=sp?'<span class="b-sp">Offre spéciale</span>':p.best?'<span class="b-best">Best-seller</span>':'<span></span>';const low=left<=3?`<span class="b-low">Plus que ${left}</span>`:'';return`<div class="badges">${tag}${low}</div>`;}
 function infoHTML(p){
   const inCart=cart.get(p.id)||0, full=inCart>=p.maxQty, o=offerFor(p);
-  const hint=o.kind==='special'?'Prix spécial · dans la limite du stock':o.rate>=20?'Meilleur palier atteint':`Jusqu’à ${fmt(o.max)} dès 3 articles`;
+  const hint=o.kind==='special'?'Prix spécial Black Friday':o.rate>=20?'Meilleur palier atteint':`Jusqu’à ${fmt(o.max)} dès 3 articles`;
   return `<div class="info"><div class="brand">${esc(p.brand)}</div><h3>${esc(p.name)}</h3><div class="vol">${esc(p.volume)}</div>
     <div class="price"><span class="now">${fmt(o.now)}</span><s>${fmt(p.price)}</s></div>
     <div class="save"><span class="s-d">Vous économisez</span><span class="s-m">Économisez</span> <b>${fmt(o.save)}</b></div>
     <div class="hint${o.kind==='tier'&&o.rate>=20?' ok':''}">${hint}</div>
-    <button class="add${inCart?' done':''}" data-add="${p.id}" ${full?'disabled':''}>${full?'Stock maximum atteint':inCart?`Ajouté · ${inCart} — encore +1`:'Ajouter au panier'}</button></div>`;
+    <button class="add${inCart?' done':''}" data-add="${p.id}" ${full?'disabled':''}>${full?'Quantité max. atteinte':inCart?`Ajouté · ${inCart} — encore +1`:'Ajouter au panier'}</button></div>`;
 }
 function cardHTML(p){return `<article class="card${isSp(p)?' is-sp':''}" data-id="${p.id}"><div class="tile">${badgesHTML(p)}<img src="${esc(p.image)}" alt="${esc(p.brand+' '+p.name)}" loading="lazy" decoding="async" width="720" height="720"></div>${infoHTML(p)}</article>`;}
 function refreshCards(){$$('.card[data-id]').forEach(c=>{const p=byId.get(+c.dataset.id);const n=document.createElement('div');n.innerHTML=infoHTML(p);c.querySelector('.info').replaceWith(n.firstElementChild)});}
@@ -836,13 +842,13 @@ const effPrice=p=>isSp(p)?p.sp:p.price;
 const maxSave=p=>isSp(p)?p.price-p.sp:p.price-at(p.price,20);
 function filtered(){let L=P.filter(p=>(!cat||(cat==='__sp'?isSp(p):p.cat===cat))&&(!q||(p.brand+' '+p.name+' '+p.catName).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').includes(q)));
   if(sort==='asc')L.sort((a,b)=>effPrice(a)-effPrice(b));else if(sort==='desc')L.sort((a,b)=>effPrice(b)-effPrice(a));else if(sort==='brand')L.sort((a,b)=>a.brand.localeCompare(b.brand)||a.name.localeCompare(b.name));else if(sort==='save')L.sort((a,b)=>maxSave(b)-maxSave(a));else L.sort((a,b)=>a.rank-b.rank);return L;}
-function renderShop(){const L=filtered();$('#grid').innerHTML=L.slice(0,shown).map(cardHTML).join('')||'<p class="empty" style="grid-column:1/-1"><b>Aucun résultat</b>Essayez une autre recherche.</p>';$('#countLine').textContent=`${Math.min(shown,L.length)} sur ${L.length} produits en stock`;$('#more').hidden=shown>=L.length;}
+function renderShop(){const L=filtered();$('#grid').innerHTML=L.slice(0,shown).map(cardHTML).join('')||'<p class="empty" style="grid-column:1/-1"><b>Aucun résultat</b>Essayez une autre recherche.</p>';$('#countLine').textContent=`${Math.min(shown,L.length)} sur ${L.length} produits disponibles`;$('#more').hidden=shown>=L.length;}
 function renderChips(){const counts={},names={};P.forEach(p=>{counts[p.cat]=(counts[p.cat]||0)+1;names[p.cat]=p.catName});const order=Object.keys(counts).sort((a,b)=>counts[b]-counts[a]);
   $('#chips').innerHTML=`<button class="chip on" data-cat="">Tout <small>${P.length}</small></button>`+(HAS_SP?`<button class="chip gold" data-cat="__sp">Offre spéciale −30 % <small>${SP.size}</small></button>`:'')+order.map(k=>`<button class="chip" data-cat="${esc(k)}">${esc(names[k])} <small>${counts[k]}</small></button>`).join('');}
 
 /* ---------- ajouts ---------- */
 let lastRate=0;
-function add(id,n=1,origin){const p=byId.get(id);if(!p)return false;const cur=cart.get(id)||0;const nq=Math.min(p.maxQty,cur+n);if(nq===cur){toast('Stock maximum atteint pour ce produit');return false;}cart.set(id,nq);afterChange(origin?{id}:null);return true;}
+function add(id,n=1,origin){const p=byId.get(id);if(!p)return false;const cur=cart.get(id)||0;const nq=Math.min(p.maxQty,cur+n);if(nq===cur){toast('Quantité maximale atteinte pour ce produit');return false;}cart.set(id,nq);afterChange(origin?{id}:null);return true;}
 function setQty(id,d){const p=byId.get(id);if(!p)return;const cur=cart.get(id)||0;const nq=Math.max(0,Math.min(p.maxQty,cur+d));if(nq===0)cart.delete(id);else cart.set(id,nq);afterChange();}
 function afterChange(origin){const c=calculate();render();refreshCards();$('#cartBtn').classList.remove('bump');void $('#cartBtn').offsetWidth;$('#cartBtn').classList.add('bump');
   if(c.rate>lastRate&&(c.stdUnits||c.rate===20)){celebrate(c);}else if(origin){const p=byId.get(origin.id);toast(p&&isSp(p)?`Ajouté · vous économisez ${fmt(p.price-p.sp)}`:'Ajouté au panier');}
@@ -875,7 +881,7 @@ function renderStatic(){
   if(!HAS_SP){$$('[data-sp-only]').forEach(e=>e.hidden=true);$('#offre-speciale').hidden=true;$('#heroCta').setAttribute('href','#boutique');$('#heroCta').textContent='Composer mon panier';}
   else{
     $('#spStatCount').textContent=SP.size;$('#spStatMax').textContent=fmt(maxSp);$('#spStatMin').textContent=fmt(minSp);
-    $('#spIntro').innerHTML=`${SP.size} références best-sellers et soins cultes passent à <strong>−30 %</strong>, prix déjà remisé et affiché. <strong>Dans la limite du stock disponible</strong> : une référence épuisée disparaît de l’offre.`;
+    $('#spIntro').innerHTML=`${SP.size} références best-sellers et soins cultes passent à <strong>−30 %</strong>, prix déjà remisé et affiché. Dès qu’une référence est épuisée, elle quitte l’offre.`;
     renderSpChips();renderSp();
   }
   $('#popSub').innerHTML=HAS_SP?`<strong>−30 %</strong> sur ${SP.size} références sélectionnées, jusqu’à <strong>${fmt(maxSp)}</strong> économisés sur un seul produit. Et jusqu’à <strong>−20 %</strong> sur le reste du panier.`:'Plus vous ajoutez, plus la remise grimpe : jusqu’à <strong>−20 %</strong> sur le panier.';
@@ -883,7 +889,7 @@ function renderStatic(){
   $('#bestGrid').innerHTML=best.map(cardHTML).join('');
   if(!best.length)$('#incontournables').hidden=true;
   if(!DATA.routines.length){$('#routines').hidden=true;$$('[data-routines-only]').forEach(e=>e.hidden=true);}
-  $('#routineGrid').innerHTML=DATA.routines.map((r,i)=>{const b=bundleCalc(r.ids);return`<article class="routine reveal"><span class="rsave">−${fmt(b.save)}</span><div class="trio">${b.ps.map(p=>`<img src="${esc(p.image)}" alt="" loading="lazy">`).join('')}</div><h3>${esc(r.title)}</h3><div class="for">${esc(r.for)}</div><ul>${b.ps.map(p=>`<li><span>${isSp(p)?'<em>−30 %</em>':''}${esc(p.brand)} · ${esc(p.name)}</span><span>${fmt(isSp(p)?p.sp:at(p.price,20))}</span></li>`).join('')}</ul><div class="tot"><b>${fmt(b.now)}</b><s>${fmt(b.list)}</s></div><button class="btn btn-rose" data-routine="${i}">Ajouter la routine · −${fmt(b.save)}</button></article>`}).join('');
+  $('#routineGrid').innerHTML=DATA.routines.map((r,i)=>{const b=bundleCalc(r.ids);return`<article class="routine reveal"><span class="rsave">−${b.pct} %</span><div class="trio">${b.ps.map(p=>`<img src="${esc(p.image)}" alt="" loading="lazy">`).join('')}</div><h3>${esc(r.title)}</h3><div class="for">${esc(r.for)}</div><ul>${b.ps.map(p=>`<li><span>${isSp(p)?'<em>−30 %</em>':''}${esc(p.brand)} · ${esc(p.name)}</span><span>${fmt(isSp(p)?p.sp:at(p.price,20))}</span></li>`).join('')}</ul><div class="tot"><b>${fmt(b.now)}</b><s>${fmt(b.list)}</s></div><div class="rgain"><span>Vous économisez</span><b>${fmt(b.save)}</b></div><button class="btn btn-rose" data-routine="${i}">Ajouter la routine · −${fmt(b.save)}</button></article>`}).join('');
   const ex=bundleCalc(DATA.example);
   if(ex.ps.length>=2){const nSp=ex.ps.filter(isSp).length;$('#example').innerHTML=`<div class="imgs">${ex.ps.map(p=>`<img src="${esc(p.image)}" alt="">`).join('')}</div><div>Exemple : ${ex.ps.map(p=>esc(p.name)+(isSp(p)?' (offre spéciale)':'')).join(' + ')}<br><s>${fmt(ex.list)}</s> → <b>${fmt(ex.now)}</b><span class="ex-save">−${fmt(ex.save)}</span>${nSp&&nSp<ex.ps.length?' · l’offre spéciale compte pour le palier −20 %':''}</div>`;}else{$('#example').hidden=true;}
   $('#shopIntro').textContent=`${P.length} produits disponibles, du nettoyant au soin capillaire. Prix barré = prix boutique ; l’économie affichée suit votre panier.`;
@@ -893,7 +899,7 @@ function renderStatic(){
 document.addEventListener('click',e=>{
   const a=e.target.closest('[data-add]');if(a&&!a.disabled){const card=a.closest('.card');if(add(+a.dataset.add,1,true))fly(card?card.querySelector('.tile img'):a.querySelector('img'));return;}
   const qb=e.target.closest('[data-q]');if(qb){setQty(+qb.dataset.q,+qb.dataset.d);return;}
-  const rt=e.target.closest('[data-routine]');if(rt){const r=DATA.routines[+rt.dataset.routine];const ps=r.ids.map(id=>byId.get(id));if(ps.some(p=>!p||(cart.get(p.id)||0)>=p.maxQty)){toast('Stock maximum atteint pour un produit de cette routine');return;}ps.forEach(p=>cart.set(p.id,(cart.get(p.id)||0)+1));afterChange({id:ps[0].id});fly(rt.closest('.routine').querySelector('.trio img:nth-child(2)'));setTimeout(openCart,650);return;}
+  const rt=e.target.closest('[data-routine]');if(rt){const r=DATA.routines[+rt.dataset.routine];const ps=r.ids.map(id=>byId.get(id));if(ps.some(p=>!p||(cart.get(p.id)||0)>=p.maxQty)){toast('Quantité maximale atteinte pour un produit de cette routine');return;}ps.forEach(p=>cart.set(p.id,(cart.get(p.id)||0)+1));afterChange({id:ps[0].id});fly(rt.closest('.routine').querySelector('.trio img:nth-child(2)'));setTimeout(openCart,650);return;}
   const sc=e.target.closest('[data-spcat]');if(sc){$$('[data-spcat]').forEach(c=>c.classList.toggle('on',c===sc));spCat=sc.dataset.spcat;renderSp();return;}
   const ch=e.target.closest('[data-cat]');if(ch){$$('[data-cat]').forEach(c=>c.classList.toggle('on',c===ch));cat=ch.dataset.cat;shown=24;renderShop();return;}
   if(e.target.closest('#checkout')){checkout();return;}
