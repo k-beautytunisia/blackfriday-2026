@@ -65,6 +65,8 @@ def main() -> None:
         try:
             stock = int(raw.get("stock")) if raw.get("stock") is not None else None
             price_millimes = round(float(raw["price"]) * 1000)
+            compare_raw = raw.get("compareAtPrice")
+            compare_millimes = round(float(compare_raw) * 1000) if compare_raw not in (None, "") else None
         except (TypeError, ValueError, KeyError):
             raise SystemExit(f"STOP: prix/stock non interprétable pour le produit public {pid}.")
         stock_status = raw.get("stockStatus")
@@ -83,6 +85,8 @@ def main() -> None:
             "categorySlug": str(raw.get("categorySlug") or "autres"),
             "volume": str(raw.get("volume") or ""),
             "priceMillimes": price_millimes,
+            # Prix barré public (si une promotion production est active) ; None sinon.
+            "compareAtMillimes": compare_millimes if compare_millimes and compare_millimes > price_millimes else None,
             "availableQuantity": stock,
             "bestSeller": bool(raw.get("isBestSeller")),
             "image": image,

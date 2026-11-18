@@ -48,6 +48,15 @@ jobs:
           assert 'createOrder' not in page
           assert 'fetch(' not in page
           assert '__DATA__' not in page
+          import build_site
+          data, by_id, excluded = build_site.build_data(snap)
+          stock = {p['id'] for p in snap['products'] if int(p['availableQuantity']) > 0}
+          assert len(set(build_site.SPECIAL_30_IDS)) == len(build_site.SPECIAL_30_IDS) == 55
+          assert set(data['special']) == set(build_site.SPECIAL_30_IDS) & stock
+          assert all(0 < by_id[i]['sp'] < by_id[i]['price'] for i in data['special'])
+          assert all(by_id[i]['sp'] == build_site.special_price(by_id[i]['price']) for i in data['special'] if by_id[i]['spSource'] == 'simulation')
+          assert all(all(i in by_id for i in r['ids']) for r in data['routines'])
+          print(f"special={len(data['special'])}/55 packs={len(data['routines'])} excluded={sorted(excluded)}")
           PY
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5

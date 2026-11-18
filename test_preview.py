@@ -1,71 +1,195 @@
+"""Tests bloquants de la préproduction Black Friday V2 (aucune requête vers la boutique, aucune commande)."""
 from pathlib import Path
 import json
 import subprocess
-import time
+import sys
+import tempfile
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).parent
 PORT = 8091
 URL = f"http://127.0.0.1:{PORT}/"
+sys.path.insert(0, str(ROOT))
+import build_site  # noqa: E402
+
+# ---------- 1. Tests du générateur (sans navigateur) ----------
+assert len(build_site.SPECIAL_30_IDS) == 55 == len(set(build_site.SPECIAL_30_IDS)), "sélection −30 % invalide"
+assert build_site.special_price(129000) == 90000
+assert build_site.special_price(89000) == 62000
+assert build_site.special_price(11000) == 7000
+assert build_site.special_price(19000) == 13000
+for price in range(1000, 400000, 1000):
+    sp = build_site.special_price(price)
+    assert sp % 1000 == 0 and sp * 100 <= price * 70 and (sp + 1000) * 100 > price * 70, (price, sp)
+
+snap = json.loads((ROOT / "catalogue.json").read_text(encoding="utf-8"))
+data, by_id, excluded = build_site.build_data(snap)
+in_stock = {p["id"] for p in snap["products"] if int(p["availableQuantity"]) > 0}
+assert set(data["special"]) == set(build_site.SPECIAL_30_IDS) & in_stock, "offre spéciale ≠ sélection ∩ stock"
+assert all(by_id[i]["maxQty"] > 0 for i in data["special"])
+assert all(by_id[i]["sp"] == build_site.special_price(by_id[i]["price"]) for i in data["special"] if by_id[i]["spSource"] == "simulation")
+
+# Promotion déjà appliquée en production (prix barré public) : aucune seconde remise.
+promo = json.loads(json.dumps(snap))
+sp_target = next(p for p in promo["products"] if p["id"] in build_site.SPECIAL_30_IDS)
+std_target = next(p for p in promo["products"] if p["id"] not in build_site.SPECIAL_30_IDS)
+original = sp_target["priceMillimes"]
+sp_target["compareAtMillimes"] = original
+sp_target["priceMillimes"] = build_site.special_price(original)
+std_target["compareAtMillimes"] = std_target["priceMillimes"] + 10000
+p_data, p_by_id, _ = build_site.build_data(promo)
+assert p_by_id[sp_target["id"]]["price"] == original, "prix de référence production non repris"
+assert p_by_id[sp_target["id"]]["sp"] == build_site.special_price(original), "double remise sur promo production"
+assert p_by_id[sp_target["id"]]["spSource"] == "production"
+assert p_by_id[std_target["id"]]["price"] == std_target["priceMillimes"], "produit standard : base = prix réel"
+assert all(all(pid in by_id for pid in r["ids"]) for r in data["routines"]), "pack affiché avec un produit indisponible"
+
+# Snapshot synthétique : un produit de pack + deux références spéciales passent en rupture.
+synthetic = json.loads(json.dumps(snap))
+pack_victim = build_site.ROUTINE_SPECS[0]["ids"][0]
+special_victims = [i for i in build_site.SPECIAL_30_IDS if i in in_stock][:2]
+removed = {pack_victim, *special_victims}
+synthetic["products"] = [p for p in synthetic["products"] if p["id"] not in removed]
+synthetic["availableCount"] = len(synthetic["products"])
+s_data, s_by_id, s_excluded = build_site.build_data(synthetic)
+assert all(pack_victim not in r["ids"] for r in s_data["routines"]), "pack non masqué après rupture"
+assert not any(r["title"] == build_site.ROUTINE_SPECS[0]["title"] for r in s_data["routines"])
+assert not set(special_victims) & set(s_data["special"]), "référence −30 % en rupture encore affichée"
+assert set(special_victims) <= set(s_excluded)
+with tempfile.TemporaryDirectory() as tmp:
+    snap_path = Path(tmp) / "snap.json"
+    snap_path.write_text(json.dumps(synthetic), encoding="utf-8")
+    out = Path(tmp) / "site"
+    subprocess.run([sys.executable, str(ROOT / "build_site.py"), "--snapshot", str(snap_path), "--out", str(out)], check=True, capture_output=True)
+    page = (out / "index.html").read_text(encoding="utf-8")
+    assert build_site.ROUTINE_SPECS[0]["title"] not in page
+    # Incohérence de comptage → arrêt sans build.
+    bad = dict(synthetic, availableCount=synthetic["availableCount"] + 1)
+    snap_path.write_text(json.dumps(bad), encoding="utf-8")
+    r = subprocess.run([sys.executable, str(ROOT / "build_site.py"), "--snapshot", str(snap_path), "--out", str(Path(tmp) / "bad")], capture_output=True, text=True)
+    assert r.returncode != 0 and not (Path(tmp) / "bad" / "index.html").exists(), "build non fail-closed"
+
+# ---------- 2. Tests navigateur ----------
+def expected(pg, cart):
+    """Recalcul indépendant en Python de la règle simulée."""
+    prods = {p["id"]: p for p in pg.evaluate("window.KBBF.products()")}
+    sp = set(pg.evaluate("window.KBBF.special()"))
+    units = sum(cart.values())
+    rate = 20 if units >= 3 else 15 if units == 2 else 10 if units == 1 else 0
+    sub = disc_sp = disc_tier = 0
+    for pid, q in cart.items():
+        price = prods[pid]["price"] * q
+        sub += price
+        if pid in sp:
+            disc_sp += price - prods[pid]["sp"] * q
+        else:
+            disc_tier += price - round(price * (100 - rate) / 100)
+    return {"rate": rate, "subtotal": sub, "specialDiscount": disc_sp, "tierDiscount": disc_tier, "total": sub - disc_sp - disc_tier}
 
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=True, executable_path="/usr/bin/chromium", args=["--no-sandbox"])
     desktop = browser.new_page(viewport={"width": 1440, "height": 1000}, device_scale_factor=1)
-    network_calls = []
-    desktop.on("request", lambda req: network_calls.append(req.url))
+    calls, errors = [], []
+    desktop.on("request", lambda req: calls.append(req.url))
+    desktop.on("pageerror", lambda e: errors.append(str(e)))
     desktop.goto(URL, wait_until="networkidle", timeout=30000)
     assert desktop.locator("body").evaluate("e => e.classList.contains('sync-ok')")
     assert "Préproduction" in desktop.locator("#previewRibbon").inner_text()
-    assert "2026" in desktop.locator("#syncStamp").inner_text()
     assert desktop.locator("#popup").is_visible(timeout=5000)
-    desktop.screenshot(path=str(ROOT / "preview-popup-desktop.png"), full_page=False)
     desktop.locator("#popCta").click()
-    desktop.wait_for_timeout(1100)
+    desktop.wait_for_timeout(1300)
     assert desktop.locator("#bfView").is_visible()
-    desktop.wait_for_timeout(400)
-    assert desktop.locator(".card[data-id]").count() >= 24
-    desktop.screenshot(path=str(ROOT / "preview-shop-desktop.png"), full_page=False)
 
-    data = json.loads((ROOT / "catalogue.json").read_text())
-    ids = [p["id"] for p in data["products"][:3]]
-    desktop.evaluate("pid => window.KBBF.add(pid,1)", ids[0])
-    assert desktop.evaluate("window.KBBF.calculate().rate") == 10
-    desktop.evaluate("pid => window.KBBF.add(pid,1)", ids[1])
-    assert desktop.evaluate("window.KBBF.calculate().rate") == 15
-    desktop.evaluate("pid => window.KBBF.add(pid,1)", ids[2])
-    assert desktop.evaluate("window.KBBF.calculate().rate") == 20
-    result = desktop.evaluate("window.KBBF.calculate()")
-    assert result["units"] == 3, result
-    assert result["rate"] == 20, result
-    assert result["total"] == result["subtotal"] - result["discount"], result
+    sp = desktop.evaluate("window.KBBF.special()")
+    assert len(sp) == len(data["special"]) > 0
+    assert desktop.locator("#offre-speciale").is_visible()
+    assert "dans la limite du stock disponible" in desktop.locator("#offre-speciale").inner_text().lower()
+    desktop.locator("#spMore").click()
+    assert desktop.locator("#spGrid .card.is-sp").count() == len(sp)
+    # Cartes : montant économisé en TND, aucun pourcentage sur les cartes produit.
+    card_text = " ".join(desktop.locator(".card .price, .card .save, .card .hint, .card .badges").all_inner_texts())
+    assert "%" not in card_text, "pourcentage affiché sur une carte produit"
+    assert desktop.locator(".card .save").count() >= len(sp)
+    assert all("TND" in t for t in desktop.locator(".card .save").all_inner_texts())
+    assert desktop.locator(".routine").count() == len(data["routines"])
+
+    std = [x["id"] for x in desktop.evaluate("window.KBBF.products()") if x["id"] not in sp]
+    cases = [
+        {sp[0]: 1},                      # spécial seul : prix spécial, aucune remise palier
+        {sp[0]: 1, std[0]: 1},           # mixte 2 unités → −15 % sur le standard seulement
+        {sp[0]: 1, sp[1]: 1, std[0]: 1}, # 3 unités dont 2 spéciales → −20 % sur le standard
+        {std[0]: 1, std[1]: 1, std[2]: 1},
+        {sp[0]: 1, sp[1]: 1, sp[2]: 1},
+    ]
+    for cart in cases:
+        desktop.evaluate("window.KBBF.clear()")
+        for pid, q in cart.items():
+            desktop.evaluate("([i,n]) => window.KBBF.add(i,n)", [pid, q])
+        got = desktop.evaluate("window.KBBF.calculate()")
+        exp = expected(desktop, cart)
+        for k, v in exp.items():
+            assert got[k] == v, (cart, k, got[k], v)
+        assert got["total"] == got["subtotal"] - got["discount"] and got["discount"] == got["specialDiscount"] + got["tierDiscount"]
+        for line in got["lines"]:
+            if line["kind"] == "special":
+                assert line["total"] == by_id[line["id"]]["sp"] * line["qty"], "double remise sur un produit spécial"
+    # Stock : impossible de dépasser la quantité publique.
+    desktop.evaluate("window.KBBF.clear()")
+    target = by_id[sp[0]]
+    desktop.evaluate("([i,n]) => window.KBBF.add(i,n)", [target["id"], target["maxQty"] + 5])
+    assert desktop.evaluate("window.KBBF.cart()")[str(target["id"])] == target["maxQty"]
+
+    desktop.evaluate("([a,b]) => {window.KBBF.clear();window.KBBF.add(a,1);window.KBBF.add(b,1)}", [sp[0], std[0]])
     desktop.locator("#cartBtn").click()
-    assert "simulation" in desktop.locator("#drFoot").inner_text().lower() or "simul" in desktop.locator("#drFoot").inner_text().lower()
-    desktop.screenshot(path=str(ROOT / "preview-cart-desktop.png"), full_page=False)
+    foot = desktop.locator("#drFoot").inner_text().lower()
+    assert "offre spéciale" in foot and "paliers" in foot and "simul" in foot
     desktop.locator("#checkout").click()
     assert desktop.locator("#modal").is_visible()
     assert "aucune commande" in desktop.locator("#modal").inner_text().lower()
-    assert not any("/api/" in url for url in network_calls), network_calls
-    assert not any("/api/trpc" in url for url in network_calls), network_calls
     assert desktop.locator("footer").count() == 0
+    assert not any("/api/" in u or "kbeauty-tunisia.com/api" in u for u in calls), [u for u in calls if "/api/" in u]
+    assert not errors, errors
 
-    mobile = browser.new_page(viewport={"width": 390, "height": 844}, device_scale_factor=1)
-    mobile.goto(URL, wait_until="networkidle", timeout=30000)
-    assert mobile.locator("body").evaluate("e => e.classList.contains('sync-ok')")
-    mobile.screenshot(path=str(ROOT / "preview-popup-mobile.png"), full_page=False)
-    mobile.locator("#popCta").click()
-    mobile.wait_for_timeout(2200)
-    assert mobile.locator("#bfView").is_visible()
-    overflow = mobile.evaluate("document.documentElement.scrollWidth > window.innerWidth")
-    assert not overflow, "horizontal overflow on mobile"
-    mobile.screenshot(path=str(ROOT / "preview-shop-mobile.png"), full_page=False)
+    # ---------- 3. Responsive ----------
+    for width, height in [(390, 844), (375, 667), (360, 780), (768, 1024)]:
+        m = browser.new_page(viewport={"width": width, "height": height}, device_scale_factor=1)
+        m_err = []
+        m.on("pageerror", lambda e: m_err.append(str(e)))
+        m.goto(URL, wait_until="networkidle", timeout=30000)
+        assert m.locator("#popup").is_visible(timeout=5000)
+        m.locator("#popCta").click()
+        m.wait_for_timeout(2300)
+        assert m.locator("#bfView").is_visible()
+        m.evaluate("document.querySelectorAll('.reveal').forEach(e=>e.classList.add('vis'))")
+        for sel in ["#offre-speciale", "#paliers", "#boutique"]:
+            m.evaluate(f"document.querySelector('{sel}').scrollIntoView()")
+            m.wait_for_timeout(150)
+            assert m.evaluate("document.documentElement.scrollWidth <= window.innerWidth"), f"débordement horizontal {width}px {sel}"
+        clipped = m.evaluate("""() => [...document.querySelectorAll('#spGrid .card')].slice(0,6).filter(c => {
+            const r=c.getBoundingClientRect(); const s=c.querySelector('.save');
+            return r.right > innerWidth + 1 || r.left < -1 || (s && s.scrollWidth > s.clientWidth + 1);
+        }).length""")
+        assert clipped == 0, f"carte tronquée à {width}px"
+        if width < 760:
+            assert m.locator("#mbar").is_visible()
+        m.evaluate("([a,b]) => {window.KBBF.add(a,1);window.KBBF.add(b,1)}", [sp[0], std[0]])
+        m.locator("#mCart" if width < 760 else "#cartBtn").click()
+        m.wait_for_timeout(600)
+        assert m.locator("#drawer").evaluate("e => e.getBoundingClientRect().width <= innerWidth + 1")
+        assert not m_err, m_err
+        m.close()
 
-    # Fail closed when the embedded snapshot is stale: freeze Date.now at 45 minutes later.
+    # ---------- 4. Garde de fraîcheur ----------
     stale = browser.new_page(viewport={"width": 1000, "height": 800})
     stale.add_init_script("const real=Date.now; Date.now=()=>real()+46*60*1000;")
     stale.goto(URL, wait_until="networkidle", timeout=30000)
     assert stale.locator("body").evaluate("e => e.classList.contains('sync-error')")
     assert stale.locator("#syncError").is_visible()
     assert stale.locator("#bfView").is_hidden()
-
-    print("PASS: fresh snapshot | popup | Black Friday universe | 116 in-stock items | 3-tier calculation | no order API | no footer | mobile | stale fail-closed")
     browser.close()
+
+print(
+    f"PASS V2 | stock={len(data['products'])} | −30 % affichées={len(data['special'])}/55 | packs={len(data['routines'])}/5 | "
+    "prix spécial floor 70 % | non-cumul paliers | rupture pack/spécial masquée | fail-closed build+fraîcheur | "
+    "aucun % sur cartes | aucun appel API | responsive 360/375/390/768"
+)

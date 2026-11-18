@@ -4,3 +4,11 @@ __pycache__/
 /catalogue.json.tmp
 /site/
 /preview-*.png
+# Fichiers de travail locaux (jamais publiés)
+/catalogue-full-public.json
+/images-ocr*.json
+/images-ocr*.txt
+/extract_55_screenshots.py
+/live-*.png
+/approval-payload-v1.md
+/tmp-*/
