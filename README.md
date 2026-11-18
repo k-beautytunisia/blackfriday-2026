@@ -1,6 +1,6 @@
 # Black Friday 2026 — préproduction K-Beauty Tunisia
 
-Projet distinct du dépôt du site de production. L’URL GitHub Pages du projet sera `https://k-beautytunisia.github.io/blackfriday-2026/` une fois le dépôt public et Pages activé.
+Projet distinct du dépôt du site de production. URL GitHub Pages : `https://k-beautytunisia.github.io/blackfriday-2026/` (avec le tiret de `k-beautytunisia`).
 
 ## Ce que fait la préproduction
 

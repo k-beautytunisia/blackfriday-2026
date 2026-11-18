@@ -1,6 +1,8 @@
 name: Black Friday 2026 preview
 
 on:
+  # Secours : le planificateur GitHub retarde souvent ce cron (observé : ~1 exécution/heure).
+  # La fraîcheur est garantie par l'auto-relance du job « rearm » ci-dessous.
   schedule:
     - cron: "*/15 * * * *"
   workflow_dispatch:
@@ -10,13 +12,12 @@ permissions:
   pages: write
   id-token: write
 
-concurrency:
-  group: pages
-  cancel-in-progress: true
-
 jobs:
   build-and-deploy:
     if: vars.BF_PAGES_LIVE == 'true'
+    concurrency:
+      group: pages
+      cancel-in-progress: true
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -57,3 +58,23 @@ jobs:
       - name: Deploy preview only
         id: deployment
         uses: actions/deploy-pages@v4
+
+  # Auto-relance : 10 min après chaque exécution (réussie ou non), relance ce même workflow sur main.
+  # Une seule chaîne survit (cancel-in-progress) ; BF_PAGES_LIVE != 'true' arrête tout.
+  rearm:
+    needs: build-and-deploy
+    if: ${{ always() && vars.BF_PAGES_LIVE == 'true' && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: pages-rearm
+      cancel-in-progress: true
+    permissions:
+      actions: write
+    steps:
+      - name: Wait before next refresh
+        run: sleep 600
+      - name: Trigger next refresh on main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --repo "$GITHUB_REPOSITORY" --ref main
