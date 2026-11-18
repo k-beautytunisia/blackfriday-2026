@@ -128,7 +128,7 @@ with sync_playwright() as p:
     import re
     for k in range(desktop.locator(".routine").count()):
         card = desktop.locator(".routine").nth(k)
-        assert re.fullmatch(r"−\d{1,2} %", card.locator(".rsave").inner_text().strip()), card.locator(".rsave").inner_text()
+        assert card.locator(".rsave").inner_text().strip() == "−20 %", card.locator(".rsave").inner_text()
         gain = card.locator(".rgain b").inner_text().strip()
         assert gain.endswith("TND") and gain in card.locator("[data-routine]").inner_text()
         assert "%" not in card.locator("[data-routine]").inner_text(), "bouton routine en pourcentage"
@@ -136,6 +136,13 @@ with sync_playwright() as p:
     # Le mot « stock » ne doit apparaître qu’une fois dans la page (mention de l’offre −30 %).
     visible = desktop.evaluate("document.body.innerText")
     assert len(re.findall("stock", visible, re.I)) <= 1, re.findall(r".{0,40}stock.{0,20}", visible, re.I)
+    # Jamais de nombre de produits à −30 % affiché, ni bloc de statistiques.
+    desktop.locator("#spMore").evaluate("e => e.click()") if desktop.locator("#spMore").is_visible() else None
+    shown_text = desktop.evaluate("document.body.innerText")
+    n_sp = len(sp)
+    assert not re.search(rf"(?<![\d,.]){n_sp}(?![\d,.])\s*(produits?|prix choc|références|soins)", shown_text, re.I), "nombre de produits −30 % affiché"
+    assert desktop.locator(".sp-stats, #spStatCount, #spStatMax, #spStatMin, [data-sp-count]").count() == 0
+    assert desktop.locator("#spChips small, [data-cat='__sp'] small").count() == 0, "compteur sur les filtres prix choc"
     # Aucun vocabulaire qui laisse penser à une liste d'invendus ni ancienne période.
     banned = re.findall(r"offre sp[ée]ciale|s[ée]lection|invendu|21\s*(?:—|au)\s*27|27 nov", visible, re.I)
     assert not banned, banned
@@ -174,8 +181,12 @@ with sync_playwright() as p:
     # Routines : offre autonome à prix fixe, aucune seconde remise, produits internes hors palier.
     desktop.evaluate("window.KBBF.clear()")
     if data["routines"]:
+        for ri, r in enumerate(data["routines"]):
+            rc = desktop.evaluate("i => window.KBBF.routineCalc(i)", ri)
+            lst = sum(by_id[i]["price"] for i in r["ids"])
+            assert rc["list"] == lst and rc["now"] == round(lst * 80 / 100) and rc["pct"] == 20, ("pack hors −20 %", r["title"], rc)
         r0 = desktop.evaluate("window.KBBF.routineCalc(0)")
-        assert r0["now"] % 1000 == 0 and r0["save"] == r0["list"] - r0["now"] > 0
+        assert r0["save"] == r0["list"] - r0["now"] > 0
         desktop.evaluate("window.KBBF.addRoutine(0)")
         c = desktop.evaluate("window.KBBF.calculate()")
         assert c["refs"] == 0 and c["rate"] == 0 and c["total"] == r0["now"] and c["routineDiscount"] == r0["save"]
@@ -274,9 +285,9 @@ with sync_playwright() as p:
     browser.close()
 
 print(
-    f"PASS V2.3 | stock={len(data['products'])} | −30 % affichées={len(data['special'])}/55 | packs={len(data['routines'])}/5 | "
+    f"PASS V2.4 | stock={len(data['products'])} | −30 % affichées={len(data['special'])}/55 | packs={len(data['routines'])}/5 | "
     "prix spécial floor 70 % | non-cumul paliers | rupture pack/spécial masquée | fail-closed build+fraîcheur | "
-    "aucun % sur cartes | paliers par produits différents | routines prix fixe hors palier | fin 30/11 | "
-    "bannière −30 % | ordre principe>routines>prix choc>Skin Match | Skin Match 40 profils | "
+    "aucun % sur cartes | paliers par produits différents | routines −20 % hors palier | fin 30/11 | "
+    "aucun comptage −30 % | packs −20 % exact | bannière −30 % | ordre principe>routines>prix choc>Skin Match | Skin Match 40 profils | "
     "aucun appel API | responsive 360/375/390/768"
 )

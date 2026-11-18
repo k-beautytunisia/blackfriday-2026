@@ -205,7 +205,7 @@ body.sync-error > :not(#syncError){display:none!important}
 .sp-band{position:relative;overflow:hidden;border-radius:36px;padding:52px 40px 44px;background:linear-gradient(160deg,#fff8ee 0%,#f8e8d6 38%,#f4dcdc 100%);border:1px solid #ecd2b4;box-shadow:0 40px 90px -50px rgba(155,122,69,.55)}
 .sp-band::before{content:"−30%";position:absolute;right:-20px;top:-70px;font-family:var(--serif);font-weight:700;font-size:340px;line-height:1;color:rgba(196,162,106,.13);pointer-events:none;letter-spacing:-.04em}
 .sp-band>*{position:relative}
-.sp-head{display:grid;grid-template-columns:1.2fr 1fr;gap:28px;align-items:end;margin-bottom:26px}
+.sp-head{display:grid;grid-template-columns:1fr;gap:28px;align-items:end;margin-bottom:26px}
 .sp-head h2{font-family:var(--serif);font-weight:600;font-size:clamp(38px,4.8vw,64px);line-height:.95;margin-top:8px}
 .sp-head h2 .big{display:inline-block;font-weight:700;font-size:1.35em;line-height:.8;margin-right:.08em}
 .sp-head p{color:var(--ink2);margin-top:12px;max-width:34em}
@@ -619,7 +619,7 @@ body.sync-error > :not(#syncError){display:none!important}
 <!-- ============ VUE 1 : SITE NORMAL (maquette) ============ -->
 <section id="homeView" aria-label="Maquette d’accueil du site K-Beauty Tunisia — aperçu, non intégrée à la boutique">
   <button class="home-bar" id="homeBar" aria-label="Découvrir l’offre Black Friday">
-    <b>BLACK FRIDAY</b><span class="hb-sep">·</span><span data-sp-only>Jusqu’à −30 % · prix choc sur <span data-sp-count>55</span> produits</span><span class="hb-sep" data-sp-only>·</span><span class="hb-opt" data-sp-only>zéro code</span><span class="hb-opt" data-nosp>jusqu’à −20 % sur le panier</span><u>Découvrir →</u>
+    <b>BLACK FRIDAY</b><span class="hb-sep">·</span><span data-sp-only>Jusqu’à −30 % · prix choc sur vos soins cultes</span><span class="hb-sep" data-sp-only>·</span><span class="hb-opt" data-sp-only>zéro code</span><span class="hb-opt" data-nosp>jusqu’à −20 % sur le panier</span><u>Découvrir →</u>
   </button>
   <picture>
     <source media="(max-width:760px)" srcset="assets/home-mobile.webp">
@@ -688,7 +688,7 @@ body.sync-error > :not(#syncError){display:none!important}
         <h1 class="reveal">Black <span class="rose-text">Friday</span></h1>
         <div class="mega reveal"><small>jusqu’à</small><b class="gold-text" data-max>−30%</b></div>
         <div class="offers reveal">
-          <a class="offer sp" href="#offre-speciale" data-sp-only><small>Prix choc</small><b>−30 %</b><span>sur <span data-sp-count>55</span> produits, prix déjà remisé</span></a>
+          <a class="offer sp" href="#offre-speciale" data-sp-only><small>Prix choc</small><b>−30 %</b><span>sur des soins cultes, prix déjà remisé</span></a>
           <a class="offer" href="#paliers"><small>Paliers panier</small><b>jusqu’à −20 %</b><span>sur le reste du panier, dès 3 produits différents</span></a>
         </div>
         <div class="ctas reveal"><a class="btn btn-rose shine" href="#offre-speciale" id="heroCta">Voir les prix choc −30 %</a><a class="btn btn-ghost" href="#skin-match">Ma routine en 3 questions</a></div>
@@ -706,15 +706,15 @@ body.sync-error > :not(#syncError){display:none!important}
   <section class="sec" id="paliers">
     <div class="sec-h reveal"><h2>Le principe :<br><span class="rose-text">jusqu’à −30 %, zéro code.</span></h2><p>Toutes les réductions s’appliquent automatiquement dans le panier. Chaque produit reçoit une seule réduction, toujours la plus forte.</p></div>
     <div class="how">
-      <div class="how-c sp reveal" data-sp-only><span class="n"></span><small>Prix choc</small><b>−30 %</b><p>Sur <span data-sp-count>55</span> produits, le prix est déjà baissé de 30 %. Rien à faire.</p></div>
+      <div class="how-c sp reveal" data-sp-only><span class="n"></span><small>Prix choc</small><b>−30 %</b><p>Sur des soins cultes, le prix est déjà baissé de 30 %. Rien à faire.</p></div>
       <div class="how-c lad reveal"><span class="n"></span><small>Paliers panier</small><div class="ladder"><div><em>1 produit</em><b>−10 %</b></div><div><em>2 produits</em><b>−15 %</b></div><div class="top"><em>3 et +</em><b>−20 %</b></div></div><p>Sur tous les autres produits. Chaque produit différent, prix choc compris, fait monter le palier.</p></div>
-      <div class="how-c reveal" data-routines-only><span class="n"></span><small>Routines</small><b>Prix fixe</b><p>3 soins complémentaires, déjà remisés, en un clic.</p></div>
+      <div class="how-c reveal" data-routines-only><span class="n"></span><small>Routines</small><b>−20 %</b><p>3 soins complémentaires à −20 %, en un clic.</p></div>
       <div class="how-c ship reveal"><span class="n"></span><small>Livraison</small><b>Offerte</b><p>Dès 150 TND de panier, calculés au prix boutique.</p></div>
     </div>
     <div class="example reveal" id="example"></div>
   </section>
   <section class="sec" id="routines">
-    <div class="sec-h reveal"><h2>Routines prêtes,<br><span class="rose-text">économie maximale.</span></h2><p>Trois produits complémentaires à prix fixe Black Friday, en un clic. Une routine n’est proposée que si tous ses produits sont disponibles.</p></div>
+    <div class="sec-h reveal"><h2>Routines prêtes,<br><span class="rose-text">économie maximale.</span></h2><p>Trois soins complémentaires à −20 %, en un clic. Une routine n’est proposée que si tous ses produits sont disponibles.</p></div>
     <div class="routines" id="routineGrid"></div>
   </section>
 
@@ -725,11 +725,6 @@ body.sync-error > :not(#syncError){display:none!important}
           <div class="kicker">Prix choc · Black Friday</div>
           <h2 id="spTitle"><span class="big gold-text">−30 %</span> sur des soins cultes.</h2>
           <p id="spIntro"></p>
-        </div>
-        <div class="sp-stats">
-          <div><b id="spStatCount">—</b><small>produits à −30 %</small></div>
-          <div><b id="spStatMax">—</b><small>économisés au maximum sur un produit</small></div>
-          <div><b id="spStatMin">—</b><small>premier prix choc</small></div>
         </div>
       </div>
       <div class="tools sp-tools"><div class="chips" id="spChips"></div></div>
@@ -816,7 +811,7 @@ const fmt=m=>{m=Math.round(m);const t=Math.floor(m/1000),r=m%1000;const ts=t.toL
 const rateFor=d=>d>=3?20:d===2?15:d===1?10:0;
 const at=(m,r)=>Math.round(m*(100-r)/100);
 const cart=new Map();   // produits à l'unité : id → quantité
-const rcart=new Map();  // routines (offres autonomes à prix fixe) : index → quantité
+const rcart=new Map();  // routines (packs à −20 %) : index → quantité
 const refs=()=>cart.size; // produits DIFFÉRENTS achetés à l'unité (les routines ne comptent pas)
 const used=id=>(cart.get(id)||0)+[...rcart].reduce((a,[i,q])=>a+(DATA.routines[i].ids.includes(id)?q:0),0);
 const units=()=>[...cart.values()].reduce((a,b)=>a+b,0)+[...rcart].reduce((a,[i,q])=>a+q*DATA.routines[i].ids.length,0);
@@ -825,9 +820,10 @@ const units=()=>[...cart.values()].reduce((a,b)=>a+b,0)+[...rcart].reduce((a,[i,
    Prix choc : 70 % du prix boutique arrondi au dinar inférieur, fixe, jamais remisé une seconde fois.
    Paliers : 1 / 2 / 3+ produits DIFFÉRENTS achetés à l'unité (prix choc inclus, quantités ignorées)
              → −10 / −15 / −20 % sur chaque produit hors prix choc.
-   Routines : offre autonome à prix fixe (arrondi au dinar inférieur), ni recalculée ni remisée,
-              et ses produits ne comptent pas dans les paliers. */
-function bundleCalc(ids,routine){const ps=ids.map(id=>byId.get(id)).filter(Boolean);let list=0,now=0;ps.forEach(p=>{list+=p.price;now+=isSp(p)?p.sp:at(p.price,20)});if(routine)now=Math.floor(now/1000)*1000;return{ps,list,now,save:list-now,pct:list?Math.floor((list-now)*100/list):0};}
+   Routines (packs transmis par le gérant) : −20 % exact sur la somme des prix boutique, comme en V1,
+              ni recalculées ni remisées une seconde fois ; leurs produits ne comptent pas dans les paliers. */
+const ROUTINE_RATE=20;
+function bundleCalc(ids,routine){const ps=ids.map(id=>byId.get(id)).filter(Boolean);let list=0,now=0;ps.forEach(p=>{list+=p.price;now+=isSp(p)?p.sp:at(p.price,20)});if(routine)now=at(list,ROUTINE_RATE);return{ps,list,now,save:list-now,pct:routine?ROUTINE_RATE:(list?Math.floor((list-now)*100/list):0)};}
 const routineCalc=i=>bundleCalc(DATA.routines[i].ids,true);
 function calculate(){
   const d=refs(),rate=rateFor(d);
@@ -897,12 +893,12 @@ function render(){
   renderTrack();
   const body=$('#drBody');
   if(!c.units){body.innerHTML=`<div class="empty"><b>Votre panier est vide</b>${HAS_SP?'Commencez par un prix choc −30 % ou un produit au palier −10 %.':'Ajoutez un premier produit : −10 % immédiat.'}</div>${upsellHTML(c)}`;}
-  else{body.innerHTML=c.lines.map(l=>{const p=byId.get(l.id);const tag=l.kind==='special'?'<span class="ltag special">Prix choc −30 %</span>':`<span class="ltag">Palier −${c.rate} %</span>`;return`<div class="line"><div class="im"><img src="${esc(p.image)}" alt=""></div><div><div class="br">${esc(p.brand)}</div><div class="nm">${esc(p.name)}</div>${tag}<div class="qty"><button data-q="${l.id}" data-d="-1" aria-label="Retirer un">−</button><span>${l.qty}</span><button data-q="${l.id}" data-d="1" aria-label="Ajouter un" ${used(l.id)>=p.maxQty?'disabled':''}>+</button></div></div><div class="pr">${fmt(l.total)}<s>${fmt(l.list)}</s><small>−${fmt(l.saving)}</small></div></div>`}).join('')+c.rlines.map(l=>{const r=DATA.routines[l.idx];const b=routineCalc(l.idx);const room=b.ps.every(p=>used(p.id)<p.maxQty);return`<div class="line"><div class="im"><img src="${esc(b.ps[1]?b.ps[1].image:b.ps[0].image)}" alt=""></div><div><div class="br">Routine · 3 produits</div><div class="nm">${esc(r.title)}</div><span class="ltag rfix">Prix fixe Black Friday</span><div class="qty"><button data-rq="${l.idx}" data-d="-1" aria-label="Retirer une routine">−</button><span>${l.qty}</span><button data-rq="${l.idx}" data-d="1" aria-label="Ajouter une routine" ${room?'':'disabled'}>+</button></div></div><div class="pr">${fmt(l.total)}<s>${fmt(l.list)}</s><small>−${fmt(l.saving)}</small></div></div>`}).join('')+upsellHTML(c);}
+  else{body.innerHTML=c.lines.map(l=>{const p=byId.get(l.id);const tag=l.kind==='special'?'<span class="ltag special">Prix choc −30 %</span>':`<span class="ltag">Palier −${c.rate} %</span>`;return`<div class="line"><div class="im"><img src="${esc(p.image)}" alt=""></div><div><div class="br">${esc(p.brand)}</div><div class="nm">${esc(p.name)}</div>${tag}<div class="qty"><button data-q="${l.id}" data-d="-1" aria-label="Retirer un">−</button><span>${l.qty}</span><button data-q="${l.id}" data-d="1" aria-label="Ajouter un" ${used(l.id)>=p.maxQty?'disabled':''}>+</button></div></div><div class="pr">${fmt(l.total)}<s>${fmt(l.list)}</s><small>−${fmt(l.saving)}</small></div></div>`}).join('')+c.rlines.map(l=>{const r=DATA.routines[l.idx];const b=routineCalc(l.idx);const room=b.ps.every(p=>used(p.id)<p.maxQty);return`<div class="line"><div class="im"><img src="${esc(b.ps[1]?b.ps[1].image:b.ps[0].image)}" alt=""></div><div><div class="br">Routine · 3 produits</div><div class="nm">${esc(r.title)}</div><span class="ltag rfix">Routine −20 %</span><div class="qty"><button data-rq="${l.idx}" data-d="-1" aria-label="Retirer une routine">−</button><span>${l.qty}</span><button data-rq="${l.idx}" data-d="1" aria-label="Ajouter une routine" ${room?'':'disabled'}>+</button></div></div><div class="pr">${fmt(l.total)}<s>${fmt(l.list)}</s><small>−${fmt(l.saving)}</small></div></div>`}).join('')+upsellHTML(c);}
   const left=Math.max(0,FREE_SHIP-c.subtotal);
   $('#drFoot').innerHTML=`<div class="row"><span>Prix boutique</span><span>${fmt(c.subtotal)}</span></div>
    ${c.spUnits?`<div class="row disc sp"><span>Prix choc −30 %</span><span>−${fmt(c.specialDiscount)}</span></div>`:''}
    ${c.stdUnits?`<div class="row disc"><span>Paliers (−${c.rate} % · ${c.refs} produit${c.refs>1?'s':''} différent${c.refs>1?'s':''})</span><span>−${fmt(c.tierDiscount)}</span></div>`:''}
-   ${c.rUnits?`<div class="row disc"><span>Routines à prix fixe</span><span>−${fmt(c.routineDiscount)}</span></div>`:''}
+   ${c.rUnits?`<div class="row disc"><span>Routines −20 %</span><span>−${fmt(c.routineDiscount)}</span></div>`:''}
    <div class="row tot"><span>Total produits</span><span>${fmt(c.total)}</span></div>
    ${c.discount?`<div class="saved">Vous économisez <b>${fmt(c.discount)}</b></div>`:''}
    <div class="ship">${c.freeShipping?'Livraison offerte débloquée':`Plus que <b>${fmt(left)}</b> pour la livraison offerte (dès 150 TND d’achat)`}<div class="bar"><i style="width:${Math.min(100,c.subtotal/FREE_SHIP*100)}%"></i></div></div>
@@ -923,8 +919,8 @@ function upsellHTML(c){
 const spList=()=>[...SP].map(id=>byId.get(id)).sort((a,b)=>(b.best-a.best)||((b.price-b.sp)-(a.price-a.sp))||a.rank-b.rank);
 let spCat='', spShown=matchMedia('(max-width:760px)').matches?8:12;
 function renderSpChips(){const L=spList();const counts={},names={};L.forEach(p=>{counts[p.cat]=(counts[p.cat]||0)+1;names[p.cat]=p.catName});const order=Object.keys(counts).sort((a,b)=>counts[b]-counts[a]);
-  $('#spChips').innerHTML=`<button class="chip gold on" data-spcat="">Toutes <small>${L.length}</small></button>`+order.map(k=>`<button class="chip gold" data-spcat="${esc(k)}">${esc(names[k])} <small>${counts[k]}</small></button>`).join('');}
-function renderSp(){const L=spList().filter(p=>!spCat||p.cat===spCat);$('#spGrid').innerHTML=L.slice(0,spShown).map(cardHTML).join('');const more=$('#spMore');more.hidden=spShown>=L.length;more.textContent=`Voir les ${L.length} prix choc`;}
+  $('#spChips').innerHTML=`<button class="chip gold on" data-spcat="">Tous les prix choc</button>`+order.map(k=>`<button class="chip gold" data-spcat="${esc(k)}">${esc(names[k])}</button>`).join('');}
+function renderSp(){const L=spList().filter(p=>!spCat||p.cat===spCat);$('#spGrid').innerHTML=L.slice(0,spShown).map(cardHTML).join('');const more=$('#spMore');more.hidden=spShown>=L.length;more.textContent='Voir tous les prix choc';}
 
 /* ---------- boutique ---------- */
 let cat='', q='', sort='sel', shown=24;
@@ -932,9 +928,9 @@ const effPrice=p=>isSp(p)?p.sp:p.price;
 const maxSave=p=>isSp(p)?p.price-p.sp:p.price-at(p.price,20);
 function filtered(){let L=P.filter(p=>(!cat||(cat==='__sp'?isSp(p):p.cat===cat))&&(!q||(p.brand+' '+p.name+' '+p.catName).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').includes(q)));
   if(sort==='asc')L.sort((a,b)=>effPrice(a)-effPrice(b));else if(sort==='desc')L.sort((a,b)=>effPrice(b)-effPrice(a));else if(sort==='brand')L.sort((a,b)=>a.brand.localeCompare(b.brand)||a.name.localeCompare(b.name));else if(sort==='save')L.sort((a,b)=>maxSave(b)-maxSave(a));else L.sort((a,b)=>a.rank-b.rank);return L;}
-function renderShop(){const L=filtered();$('#grid').innerHTML=L.slice(0,shown).map(cardHTML).join('')||'<p class="empty" style="grid-column:1/-1"><b>Aucun résultat</b>Essayez une autre recherche.</p>';$('#countLine').textContent=`${Math.min(shown,L.length)} sur ${L.length} produits disponibles`;$('#more').hidden=shown>=L.length;}
+function renderShop(){const L=filtered();$('#grid').innerHTML=L.slice(0,shown).map(cardHTML).join('')||'<p class="empty" style="grid-column:1/-1"><b>Aucun résultat</b>Essayez une autre recherche.</p>';$('#countLine').textContent=cat==='__sp'?'Prix choc −30 % · quantités limitées':`${Math.min(shown,L.length)} sur ${L.length} produits disponibles`;$('#more').hidden=shown>=L.length;}
 function renderChips(){const counts={},names={};P.forEach(p=>{counts[p.cat]=(counts[p.cat]||0)+1;names[p.cat]=p.catName});const order=Object.keys(counts).sort((a,b)=>counts[b]-counts[a]);
-  $('#chips').innerHTML=`<button class="chip on" data-cat="">Tout <small>${P.length}</small></button>`+(HAS_SP?`<button class="chip gold" data-cat="__sp">Prix choc −30 % <small>${SP.size}</small></button>`:'')+order.map(k=>`<button class="chip" data-cat="${esc(k)}">${esc(names[k])} <small>${counts[k]}</small></button>`).join('');}
+  $('#chips').innerHTML=`<button class="chip on" data-cat="">Tout <small>${P.length}</small></button>`+(HAS_SP?`<button class="chip gold" data-cat="__sp">Prix choc −30 %</button>`:'')+order.map(k=>`<button class="chip" data-cat="${esc(k)}">${esc(names[k])} <small>${counts[k]}</small></button>`).join('');}
 
 /* ---------- ajouts ---------- */
 let lastRate=0;
@@ -1003,18 +999,14 @@ function renderSM(){const box=$('#smBox');if(!box)return;
 /* ---------- sections statiques ---------- */
 function renderStatic(){
   const spL=spList();
-  const maxSp=spL.reduce((m,p)=>Math.max(m,p.price-p.sp),0);
-  const minSp=spL.reduce((m,p)=>Math.min(m,p.sp),Infinity);
-  $$('[data-sp-count]').forEach(e=>e.textContent=SP.size);
   $$('[data-max]').forEach(e=>e.textContent=HAS_SP?'−30%':'−20%');
   if(HAS_SP)$$('[data-nosp]').forEach(e=>e.hidden=true);
   if(!HAS_SP){$$('[data-sp-only]').forEach(e=>e.hidden=true);$('#offre-speciale').hidden=true;$('#heroCta').setAttribute('href','#boutique');$('#heroCta').textContent='Composer mon panier';}
   else{
-    $('#spStatCount').textContent=SP.size;$('#spStatMax').textContent=fmt(maxSp);$('#spStatMin').textContent=fmt(minSp);
-    $('#spIntro').innerHTML=`Les prix choc du Black Friday : <strong>−30 %</strong> directement sur le prix, sans code. Jusqu’à <strong>${fmt(maxSp)}</strong> économisés sur un seul soin. Un produit épuisé quitte l’offre.`;
+    $('#spIntro').innerHTML=`Les prix choc du Black Friday : <strong>−30 %</strong> directement sur le prix, sans code, sur des soins cultes.`;
     renderSpChips();renderSp();
   }
-  $('#popSub').innerHTML=HAS_SP?`Prix choc <strong>−30 %</strong> sur ${SP.size} produits : jusqu’à <strong>${fmt(maxSp)}</strong> économisés sur un seul produit. Et jusqu’à <strong>−20 %</strong> sur le reste du panier.`:'Plus vous ajoutez, plus la remise grimpe : jusqu’à <strong>−20 %</strong> sur le panier.';
+  $('#popSub').innerHTML=HAS_SP?`Prix choc <strong>−30 %</strong> sur vos soins cultes, sans code. Et jusqu’à <strong>−20 %</strong> sur le reste du panier.`:'Plus vous ajoutez, plus la remise grimpe : jusqu’à <strong>−20 %</strong> sur le panier.';
   const best=(DATA.best||[]).map(id=>byId.get(id)).filter(Boolean);
   $('#bestGrid').innerHTML=best.map(cardHTML).join('');
   if(!best.length)$('#incontournables').hidden=true;
@@ -1052,7 +1044,7 @@ $('#drClose').addEventListener('click',closeCart);$('#scrim').addEventListener('
 $('#search').addEventListener('input',e=>{q=e.target.value.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');shown=24;renderShop()});
 $('#sort').addEventListener('change',e=>{sort=e.target.value;renderShop()});
 $('#more').addEventListener('click',()=>{shown+=24;renderShop()});
-$('#spMore').addEventListener('click',()=>{spShown=SP.size;renderSp()});
+$('#spMore').addEventListener('click',()=>{spShown=Infinity;renderSp()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('#modal').hidden)$('#modal').hidden=true;else if($('#drawer').classList.contains('on'))closeCart();else if(!$('#popup').hidden)closePopup();}});
 window.addEventListener('hashchange',()=>{if(BF_HASHES.includes(location.hash)&&!document.body.classList.contains('in-bf'))showBF(location.hash)});
 
