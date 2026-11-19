@@ -670,7 +670,7 @@ body.sync-error > :not(#syncError){display:none!important}
       </div>
     </div>
     <div class="tierbar">
-      <a class="tb-choc" href="#offre-speciale" data-sp-only>Prix choc <b>−30 %</b></a>
+      <a class="tb-choc" href="#offre-speciale" data-sp-only>Jusqu’à <b>−30 %</b></a>
       <div class="tb-msg" id="tbMsg"></div>
       <div class="tb-track" data-track></div>
       <div class="tb-save" id="tbSave"></div>
@@ -691,7 +691,7 @@ body.sync-error > :not(#syncError){display:none!important}
           <a class="offer sp" href="#offre-speciale" data-sp-only><small>Prix choc</small><b>−30 %</b><span>déjà déduits, directement sur le prix</span></a>
           <a class="offer" href="#paliers"><small>Plus vous prenez</small><b>jusqu’à −20 %</b><span>sur tout le reste, dès 3 produits</span></a>
         </div>
-        <div class="ctas reveal"><a class="btn btn-rose shine" href="#offre-speciale" id="heroCta">Je découvre les prix choc</a><a class="btn btn-ghost" href="#skin-match">Trouver ma routine</a></div>
+        <div class="ctas reveal"><a class="btn btn-rose shine" href="#offre-speciale" id="heroCta">J’en profite maintenant</a><a class="btn btn-ghost" href="#skin-match">Trouver ma routine</a></div>
         <div class="count reveal" data-countdown><span class="lbl">Fin dans</span></div>
       </div>
       <div class="hero-art" id="heroArt">
@@ -707,8 +707,8 @@ body.sync-error > :not(#syncError){display:none!important}
     <div class="sec-h reveal"><h2>Comment ça marche ?<br><span class="rose-text">Plus vous prenez, plus vous économisez.</span></h2><p>Rien à calculer : vos réductions se déduisent toutes seules et vous voyez tout de suite combien vous économisez. Chaque produit profite de sa meilleure réduction.</p></div>
     <div class="how">
       <div class="how-c sp reveal" data-sp-only><span class="n"></span><small>Prix choc</small><b>−30 %</b><p>Le prix est déjà baissé, vous le voyez directement sur le produit.</p></div>
-      <div class="how-c lad reveal"><span class="n"></span><small>Plus vous prenez</small><div class="ladder"><div><em>1 produit</em><b>−10 %</b></div><div><em>2 produits</em><b>−15 %</b></div><div class="top"><em>3 et +</em><b>−20 %</b></div></div><p>Sur tout le reste de la boutique. Vos prix choc comptent aussi pour atteindre −20 %.</p></div>
-      <div class="how-c reveal" data-routines-only><span class="n"></span><small>Routines</small><b>−20 %</b><p>Trois soins qui vont ensemble, déjà à −20 %.</p></div>
+      <div class="how-c lad reveal"><span class="n"></span><small>Plus vous prenez</small><div class="ladder"><div><em>1 produit</em><b>−10 %</b></div><div><em>2 produits</em><b>−15 %</b></div><div class="top"><em>3 et +</em><b>−20 %</b></div></div><p>Sur tout le reste de la boutique. Les soins à −30 % comptent aussi pour atteindre −20 %.</p></div>
+      <div class="how-c reveal" data-routines-only><span class="n"></span><small>Routines</small><b>−20 %</b><p>Trois soins qui vont ensemble, déjà à −20&nbsp;%.</p></div>
       <div class="how-c ship reveal"><span class="n"></span><small>Livraison</small><b>Offerte</b><p>Dès 150 TND d’achats, avant réductions.</p></div>
     </div>
     <div class="example reveal" id="example"></div>
@@ -722,7 +722,7 @@ body.sync-error > :not(#syncError){display:none!important}
     <section class="sp-band" aria-labelledby="spTitle">
       <div class="sp-head">
         <div>
-          <div class="kicker">Prix choc · Black Friday</div>
+          <div class="kicker">Prix choc</div>
           <h2 id="spTitle"><span class="big gold-text">−30 %</span> à saisir vite.</h2>
           <p id="spIntro"></p>
         </div>
@@ -730,7 +730,7 @@ body.sync-error > :not(#syncError){display:none!important}
       <div class="tools sp-tools"><div class="chips" id="spChips"></div></div>
       <div class="grid" id="spGrid"></div>
       <div class="more"><button class="btn btn-gold" id="spMore">Voir toutes les offres</button></div>
-      <p class="sp-rule"><i>i</i><span>Offre valable <strong>dans la limite du stock disponible</strong>. Le −30 % ne se cumule pas avec les autres réductions, mais chaque prix choc vous rapproche du −20 % sur le reste.</span></p>
+      <p class="sp-rule"><i>i</i><span>Offre valable <strong>dans la limite du stock disponible</strong>. Le −30 % ne se cumule pas avec les autres réductions, mais chacun compte pour atteindre −20 % sur le reste.</span></p>
     </section>
   </div>
 
@@ -765,8 +765,8 @@ body.sync-error > :not(#syncError){display:none!important}
   <section class="final">
     <div class="kicker">Jusqu’au 30 novembre</div>
     <h2>Les meilleures offres <span class="rose-text">partent en premier.</span></h2>
-    <p>−30 % sur les prix choc, jusqu’à −20 % sur tout le reste dès 3 produits. Jusqu’au 30 novembre.</p>
-    <div class="ctas"><button class="btn btn-rose shine" id="finalCart">Voir mon panier</button><a class="btn btn-ghost" href="#offre-speciale" data-sp-only>Revoir les prix choc</a></div>
+    <p>Jusqu’à −30 %, et jusqu’à −20 % sur tout le reste dès 3 produits. Jusqu’au 30 novembre.</p>
+    <div class="ctas"><button class="btn btn-rose shine" id="finalCart">Voir mon panier</button><a class="btn btn-ghost" href="#offre-speciale" data-sp-only>Revoir les soins à −30 %</a></div>
   </section>
 </main>
 
@@ -862,10 +862,10 @@ function showBF(target){clearTimeout(popupTimer);document.body.classList.add('in
 function enterBF(target){const c=$('#curtain');c.classList.remove('out');void c.offsetWidth;c.classList.add('in');setTimeout(()=>{showBF(target);c.classList.remove('in');c.classList.add('out');setTimeout(()=>{c.classList.remove('out');c.style.transition='none';c.style.transform='translateY(100%)';void c.offsetWidth;c.style.transition='';c.style.transform='';},850)},900);}
 
 /* ---------- cartes ---------- */
-function badgesHTML(p){const sp=isSp(p);const left=p.maxQty;const tag=sp?'<span class="b-sp">Prix choc</span>':p.best?'<span class="b-best">Best-seller</span>':'<span></span>';const low=left<=3?`<span class="b-low">Plus que ${left}</span>`:'';return`<div class="badges">${tag}${low}</div>`;}
+function badgesHTML(p){const sp=isSp(p);const left=p.maxQty;const tag=p.best?'<span class="b-best">Best-seller</span>':'<span></span>';const low=left<=3?`<span class="b-low">Plus que ${left}</span>`:'';return`<div class="badges">${tag}${low}</div>`;}
 function infoHTML(p){
   const inCart=cart.get(p.id)||0, full=used(p.id)>=p.maxQty, o=offerFor(p);
-  const hint=o.kind==='special'?'Prix choc Black Friday':o.rate>=20?'Meilleure réduction atteinte':`Jusqu’à ${fmt(o.max)} dès 3 produits`;
+  const hint=o.kind==='special'?'':o.rate>=20?'Meilleure réduction atteinte':`Jusqu’à ${fmt(o.max)} dès 3 produits`;
   return `<div class="info"><div class="brand">${esc(p.brand)}</div><h3>${esc(p.name)}</h3><div class="vol">${esc(p.volume)}</div>
     <div class="price"><span class="now">${fmt(o.now)}</span><s>${fmt(p.price)}</s></div>
     <div class="save"><span class="s-d">Vous économisez</span><span class="s-m">Économisez</span> <b>${fmt(o.save)}</b></div>
@@ -891,11 +891,11 @@ function render(){
   $('#mCart').textContent=c.units?`Panier · ${fmt(c.total)}`:'Panier · 0';
   renderTrack();
   const body=$('#drBody');
-  if(!c.units){body.innerHTML=`<div class="empty"><b>Votre panier est vide</b>${HAS_SP?'Commencez par un prix choc à −30 %, ou n’importe quel produit à −10 %.':'Votre premier produit est à −10 %.'}</div>${upsellHTML(c)}`;}
-  else{body.innerHTML=c.lines.map(l=>{const p=byId.get(l.id);const tag=l.kind==='special'?'<span class="ltag special">Prix choc −30 %</span>':`<span class="ltag">Black Friday −${c.rate} %</span>`;return`<div class="line"><div class="im"><img src="${esc(p.image)}" alt=""></div><div><div class="br">${esc(p.brand)}</div><div class="nm">${esc(p.name)}</div>${tag}<div class="qty"><button data-q="${l.id}" data-d="-1" aria-label="Retirer un">−</button><span>${l.qty}</span><button data-q="${l.id}" data-d="1" aria-label="Ajouter un" ${used(l.id)>=p.maxQty?'disabled':''}>+</button></div></div><div class="pr">${fmt(l.total)}<s>${fmt(l.list)}</s><small>−${fmt(l.saving)}</small></div></div>`}).join('')+c.rlines.map(l=>{const r=DATA.routines[l.idx];const b=routineCalc(l.idx);const room=b.ps.every(p=>used(p.id)<p.maxQty);return`<div class="line"><div class="im"><img src="${esc(b.ps[1]?b.ps[1].image:b.ps[0].image)}" alt=""></div><div><div class="br">Routine · 3 produits</div><div class="nm">${esc(r.title)}</div><span class="ltag rfix">Routine −20 %</span><div class="qty"><button data-rq="${l.idx}" data-d="-1" aria-label="Retirer une routine">−</button><span>${l.qty}</span><button data-rq="${l.idx}" data-d="1" aria-label="Ajouter une routine" ${room?'':'disabled'}>+</button></div></div><div class="pr">${fmt(l.total)}<s>${fmt(l.list)}</s><small>−${fmt(l.saving)}</small></div></div>`}).join('')+upsellHTML(c);}
+  if(!c.units){body.innerHTML=`<div class="empty"><b>Votre panier est vide</b>${HAS_SP?'Commencez par un soin à −30 %, ou n’importe quel produit à −10 %.':'Votre premier produit est à −10 %.'}</div>${upsellHTML(c)}`;}
+  else{body.innerHTML=c.lines.map(l=>{const p=byId.get(l.id);const tag=l.kind==='special'?'<span class="ltag special">Black Friday −30 %</span>':`<span class="ltag">Black Friday −${c.rate} %</span>`;return`<div class="line"><div class="im"><img src="${esc(p.image)}" alt=""></div><div><div class="br">${esc(p.brand)}</div><div class="nm">${esc(p.name)}</div>${tag}<div class="qty"><button data-q="${l.id}" data-d="-1" aria-label="Retirer un">−</button><span>${l.qty}</span><button data-q="${l.id}" data-d="1" aria-label="Ajouter un" ${used(l.id)>=p.maxQty?'disabled':''}>+</button></div></div><div class="pr">${fmt(l.total)}<s>${fmt(l.list)}</s><small>−${fmt(l.saving)}</small></div></div>`}).join('')+c.rlines.map(l=>{const r=DATA.routines[l.idx];const b=routineCalc(l.idx);const room=b.ps.every(p=>used(p.id)<p.maxQty);return`<div class="line"><div class="im"><img src="${esc(b.ps[1]?b.ps[1].image:b.ps[0].image)}" alt=""></div><div><div class="br">Routine · 3 produits</div><div class="nm">${esc(r.title)}</div><span class="ltag rfix">Routine −20 %</span><div class="qty"><button data-rq="${l.idx}" data-d="-1" aria-label="Retirer une routine">−</button><span>${l.qty}</span><button data-rq="${l.idx}" data-d="1" aria-label="Ajouter une routine" ${room?'':'disabled'}>+</button></div></div><div class="pr">${fmt(l.total)}<s>${fmt(l.list)}</s><small>−${fmt(l.saving)}</small></div></div>`}).join('')+upsellHTML(c);}
   const left=Math.max(0,FREE_SHIP-c.subtotal);
   $('#drFoot').innerHTML=`<div class="row"><span>Prix habituel</span><span>${fmt(c.subtotal)}</span></div>
-   ${c.spUnits?`<div class="row disc sp"><span>Prix choc −30 %</span><span>−${fmt(c.specialDiscount)}</span></div>`:''}
+   ${c.spUnits?`<div class="row disc sp"><span>Black Friday −30 %</span><span>−${fmt(c.specialDiscount)}</span></div>`:''}
    ${c.stdUnits?`<div class="row disc"><span>Black Friday −${c.rate} %</span><span>−${fmt(c.tierDiscount)}</span></div>`:''}
    ${c.rUnits?`<div class="row disc"><span>Routines −20 %</span><span>−${fmt(c.routineDiscount)}</span></div>`:''}
    <div class="row tot"><span>Votre total</span><span>${fmt(c.total)}</span></div>
@@ -918,8 +918,8 @@ function upsellHTML(c){
 const spList=()=>[...SP].map(id=>byId.get(id)).sort((a,b)=>(b.best-a.best)||((b.price-b.sp)-(a.price-a.sp))||a.rank-b.rank);
 let spCat='', spShown=matchMedia('(max-width:760px)').matches?8:12;
 function renderSpChips(){const L=spList();const counts={},names={};L.forEach(p=>{counts[p.cat]=(counts[p.cat]||0)+1;names[p.cat]=p.catName});const order=Object.keys(counts).sort((a,b)=>counts[b]-counts[a]);
-  $('#spChips').innerHTML=`<button class="chip gold on" data-spcat="">Tous les prix choc</button>`+order.map(k=>`<button class="chip gold" data-spcat="${esc(k)}">${esc(names[k])}</button>`).join('');}
-function renderSp(){const L=spList().filter(p=>!spCat||p.cat===spCat);$('#spGrid').innerHTML=L.slice(0,spShown).map(cardHTML).join('');const more=$('#spMore');more.hidden=spShown>=L.length;more.textContent='Voir tous les prix choc';}
+  $('#spChips').innerHTML=`<button class="chip gold on" data-spcat="">Tout voir</button>`+order.map(k=>`<button class="chip gold" data-spcat="${esc(k)}">${esc(names[k])}</button>`).join('');}
+function renderSp(){const L=spList().filter(p=>!spCat||p.cat===spCat);$('#spGrid').innerHTML=L.slice(0,spShown).map(cardHTML).join('');const more=$('#spMore');more.hidden=spShown>=L.length;more.textContent='Voir plus de soins à −30 %';}
 
 /* ---------- boutique ---------- */
 let cat='', q='', sort='sel', shown=24;
@@ -927,7 +927,7 @@ const effPrice=p=>isSp(p)?p.sp:p.price;
 const maxSave=p=>isSp(p)?p.price-p.sp:p.price-at(p.price,20);
 function filtered(){let L=P.filter(p=>(!cat||(cat==='__sp'?isSp(p):p.cat===cat))&&(!q||(p.brand+' '+p.name+' '+p.catName).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').includes(q)));
   if(sort==='asc')L.sort((a,b)=>effPrice(a)-effPrice(b));else if(sort==='desc')L.sort((a,b)=>effPrice(b)-effPrice(a));else if(sort==='brand')L.sort((a,b)=>a.brand.localeCompare(b.brand)||a.name.localeCompare(b.name));else if(sort==='save')L.sort((a,b)=>maxSave(b)-maxSave(a));else L.sort((a,b)=>a.rank-b.rank);return L;}
-function renderShop(){const L=filtered();$('#grid').innerHTML=L.slice(0,shown).map(cardHTML).join('')||'<p class="empty" style="grid-column:1/-1"><b>Aucun résultat</b>Essayez une autre recherche.</p>';$('#countLine').textContent=cat==='__sp'?'Prix choc −30 % · quantités limitées':`${Math.min(shown,L.length)} sur ${L.length} produits disponibles`;$('#more').hidden=shown>=L.length;}
+function renderShop(){const L=filtered();$('#grid').innerHTML=L.slice(0,shown).map(cardHTML).join('')||'<p class="empty" style="grid-column:1/-1"><b>Aucun résultat</b>Essayez une autre recherche.</p>';$('#countLine').textContent=cat==='__sp'?'Soins à −30 % · quantités limitées':`${Math.min(shown,L.length)} sur ${L.length} produits disponibles`;$('#more').hidden=shown>=L.length;}
 function renderChips(){const counts={},names={};P.forEach(p=>{counts[p.cat]=(counts[p.cat]||0)+1;names[p.cat]=p.catName});const order=Object.keys(counts).sort((a,b)=>counts[b]-counts[a]);
   $('#chips').innerHTML=`<button class="chip on" data-cat="">Tout <small>${P.length}</small></button>`+(HAS_SP?`<button class="chip gold" data-cat="__sp">Prix choc −30 %</button>`:'')+order.map(k=>`<button class="chip" data-cat="${esc(k)}">${esc(names[k])} <small>${counts[k]}</small></button>`).join('');}
 
@@ -947,7 +947,7 @@ function fly(img){if(!img||matchMedia('(prefers-reduced-motion: reduce)').matche
 /* ---------- tiroir / modal / toast ---------- */
 function openCart(){$('#drawer').classList.add('on');$('#drawer').setAttribute('aria-hidden','false');$('#scrim').classList.add('on');}
 function closeCart(){$('#drawer').classList.remove('on');$('#drawer').setAttribute('aria-hidden','true');$('#scrim').classList.remove('on');}
-function checkout(){const c=calculate();if(!c.units)return;closeCart();$('#modalBox').innerHTML=`<div class="kicker">Votre récapitulatif</div><h3 id="mTitle">Vous économisez ${fmt(c.discount)}</h3><p>${c.units} produit${c.units>1?'s':''}${c.spUnits?` · ${c.spUnits} à prix choc`:''}${c.stdUnits?` · −${c.rate} % sur le reste`:''}${c.rUnits?` · ${c.rUnits} routine${c.rUnits>1?'s':''}`:''}</p><div class="big">${fmt(c.total)}</div><p>Au lieu de <s>${fmt(c.subtotal)}</s> · vous économisez <b style="color:var(--rose-d)">${fmt(c.discount)}</b>${c.freeShipping?' · livraison offerte':''}</p><p style="font-size:13px;margin-top:12px">Aperçu de préproduction : aucune commande, aucun paiement et aucune donnée ne sont envoyés.</p><button class="btn btn-rose" id="modalContinue">Continuer mes achats</button>`;$('#modal').hidden=false;$('#modalContinue').focus();}
+function checkout(){const c=calculate();if(!c.units)return;closeCart();$('#modalBox').innerHTML=`<div class="kicker">Votre récapitulatif</div><h3 id="mTitle">Vous économisez ${fmt(c.discount)}</h3><p>${c.units} produit${c.units>1?'s':''}${c.spUnits?` · ${c.spUnits} à −30 %`:''}${c.stdUnits?` · −${c.rate} % sur le reste`:''}${c.rUnits?` · ${c.rUnits} routine${c.rUnits>1?'s':''}`:''}</p><div class="big">${fmt(c.total)}</div><p>Au lieu de <s>${fmt(c.subtotal)}</s> · vous économisez <b style="color:var(--rose-d)">${fmt(c.discount)}</b>${c.freeShipping?' · livraison offerte':''}</p><p style="font-size:13px;margin-top:12px">Aperçu de préproduction : aucune commande, aucun paiement et aucune donnée ne sont envoyés.</p><button class="btn btn-rose" id="modalContinue">Continuer mes achats</button>`;$('#modal').hidden=false;$('#modalContinue').focus();}
 let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2300);}
 
 /* ---------- confettis ---------- */
@@ -989,7 +989,7 @@ function renderSM(){const box=$('#smBox');if(!box)return;
   if(ps.length<2){box.innerHTML=`<h3>Pas encore de routine pour ce profil</h3><p class="sm-note">Il nous manque des produits pour vous composer une routine complète. Nos routines prêtes, juste au-dessus, peuvent vous plaire.</p><button class="btn btn-ghost" data-smreset>Refaire le test</button>`;delete box.dataset.ids;return;}
   const c=smCalc(ps);
   box.innerHTML=`<div class="sm-res-h"><div class="kicker">Votre routine idéale</div><button class="sm-back" data-smreset>Refaire le test</button></div>
-  <ol class="sm-list">${picks.map(({lab,p},i)=>`<li style="animation-delay:${i*60}ms"><img src="${esc(p.image)}" alt="" loading="lazy"><div><small>${lab}${isSp(p)?' · <em>Prix choc</em>':''}</small><b>${esc(p.brand)} · ${esc(p.name)}</b></div><span>${fmt(isSp(p)?p.sp:at(p.price,c.rate))}<s>${fmt(p.price)}</s></span></li>`).join('')}</ol>
+  <ol class="sm-list">${picks.map(({lab,p},i)=>`<li style="animation-delay:${i*60}ms"><img src="${esc(p.image)}" alt="" loading="lazy"><div><small>${lab}${isSp(p)?' · <em>−30 %</em>':''}</small><b>${esc(p.brand)} · ${esc(p.name)}</b></div><span>${fmt(isSp(p)?p.sp:at(p.price,c.rate))}<s>${fmt(p.price)}</s></span></li>`).join('')}</ol>
   <div class="sm-tot"><div><small>Au lieu de</small><s>${fmt(c.list)}</s></div><div><small>Votre prix Black Friday</small><b>${fmt(c.now)}</b></div></div>
   <div class="sm-gain"><span>Vous économisez</span><b>${fmt(c.save)}</b></div>
   <button class="btn btn-rose shine sm-cta" data-smadd>Ajouter · économisez ${fmt(c.save)}</button>
@@ -1012,7 +1012,7 @@ function renderStatic(){
   if(!DATA.routines.length){$('#routines').hidden=true;$$('[data-routines-only]').forEach(e=>e.hidden=true);}
   $('#routineGrid').innerHTML=DATA.routines.map((r,i)=>{const b=routineCalc(i);return`<article class="routine reveal"><span class="rsave">−${b.pct} %</span><div class="trio">${b.ps.map(p=>`<img src="${esc(p.image)}" alt="" loading="lazy">`).join('')}</div><h3>${esc(r.title)}</h3><div class="for">${esc(r.for)}</div><ul>${b.ps.map(p=>`<li><span>${esc(p.brand)} · ${esc(p.name)}</span><span>${fmt(p.price)}</span></li>`).join('')}</ul><div class="tot"><b>${fmt(b.now)}</b><s>${fmt(b.list)}</s></div><div class="rgain"><span>Vous économisez</span><b>${fmt(b.save)}</b></div><button class="btn btn-rose" data-routine="${i}">Ajouter · économisez ${fmt(b.save)}</button></article>`}).join('');
   const ex=bundleCalc(DATA.example);
-  if(ex.ps.length>=2){const nSp=ex.ps.filter(isSp).length;$('#example').innerHTML=`<div class="imgs">${ex.ps.map(p=>`<img src="${esc(p.image)}" alt="">`).join('')}</div><div>Par exemple : ${ex.ps.map(p=>esc(p.name)+(isSp(p)?' (prix choc)':'')).join(' + ')}<br><s>${fmt(ex.list)}</s> → <b>${fmt(ex.now)}</b><span class="ex-save">−${fmt(ex.save)}</span>${nSp&&nSp<ex.ps.length?' · le prix choc vous fait aussi passer à −20 %':''}</div>`;}else{$('#example').hidden=true;}
+  if(ex.ps.length>=2){const nSp=ex.ps.filter(isSp).length;$('#example').innerHTML=`<div class="imgs">${ex.ps.map(p=>`<img src="${esc(p.image)}" alt="">`).join('')}</div><div>Concrètement : ${ex.ps.map(p=>esc(p.name)).join(' + ')}<br><s>${fmt(ex.list)}</s> → <b>${fmt(ex.now)}</b><span class="ex-save">−${fmt(ex.save)}</span></div>`;}else{$('#example').hidden=true;}
   $('#shopIntro').textContent='Du nettoyant au soin capillaire, chaque produit est en promo : −10 % dès le premier, jusqu’à −20 % dès 3.';
 }
 

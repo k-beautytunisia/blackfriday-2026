@@ -115,7 +115,7 @@ with sync_playwright() as p:
     import datetime as _dt
     assert desktop.evaluate("window.KBBF.endsAt") == int(_dt.datetime(2026, 11, 30, 22, 59, 59, tzinfo=_dt.timezone.utc).timestamp() * 1000)
     assert "Fin de l’offre dans" in desktop.locator(".head-count").inner_text()
-    assert "Prix choc" in desktop.locator(".tierbar").inner_text() and "−30 %" in desktop.locator(".tierbar").inner_text()
+    assert "−30 %" in desktop.locator(".tierbar").inner_text()
     desktop.locator("#spMore").click()
     assert desktop.locator("#spGrid .card.is-sp").count() == len(sp)
     # Cartes : montant économisé en TND, aucun pourcentage sur les cartes produit.
@@ -144,8 +144,10 @@ with sync_playwright() as p:
     assert desktop.locator(".sp-stats, #spStatCount, #spStatMax, #spStatMin, [data-sp-count]").count() == 0
     assert desktop.locator("#spChips small, [data-cat='__sp'] small").count() == 0, "compteur sur les filtres prix choc"
     # Aucun vocabulaire qui laisse penser à une liste d'invendus ni ancienne période.
-    banned = re.findall(r"offre sp[ée]ciale|s[ée]lection|invendu|21\s*(?:—|au)\s*27|27 nov|z[ée]ro code|sans code|code promo|palier|skin match|hors prix choc|catalogue public", visible, re.I)
+    banned = re.findall(r"offre sp[ée]ciale|s[ée]lection|invendu|21\s*(?:—|au)\s*27|27 nov|z[ée]ro code|sans code|code promo|palier|skin match|hors prix choc|catalogue public|exemple", visible, re.I)
     assert not banned, banned
+    n_choc = len(re.findall(r"prix choc", visible, re.I))
+    assert n_choc <= 8, f"« prix choc » répété {n_choc} fois"
 
     std = [x["id"] for x in desktop.evaluate("window.KBBF.products()") if x["id"] not in sp]
     cases = [
@@ -233,7 +235,7 @@ with sync_playwright() as p:
     desktop.evaluate("([a,b]) => {window.KBBF.clear();window.KBBF.add(a,1);window.KBBF.add(b,1)}", [sp[0], std[0]])
     desktop.locator("#cartBtn").click()
     foot = desktop.locator("#drFoot").inner_text().lower()
-    assert "prix choc" in foot and "black friday −" in foot and "préproduction" in foot
+    assert "black friday −30 %" in foot and "black friday −" in foot and "préproduction" in foot and "prix choc" not in foot
     desktop.locator("#checkout").click()
     assert desktop.locator("#modal").is_visible()
     assert "aucune commande" in desktop.locator("#modal").inner_text().lower()
@@ -285,9 +287,9 @@ with sync_playwright() as p:
     browser.close()
 
 print(
-    f"PASS V2.5 | stock={len(data['products'])} | −30 % affichées={len(data['special'])}/55 | packs={len(data['routines'])}/5 | "
+    f"PASS V2.6 | stock={len(data['products'])} | −30 % affichées={len(data['special'])}/55 | packs={len(data['routines'])}/5 | "
     "prix spécial floor 70 % | non-cumul paliers | rupture pack/spécial masquée | fail-closed build+fraîcheur | "
     "aucun % sur cartes | paliers par produits différents | routines −20 % hors palier | fin 30/11 | "
-    "textes humains sans code ni palier | aucun comptage −30 % | packs −20 % exact | bannière −30 % | ordre principe>routines>prix choc>Skin Match | Skin Match 40 profils | "
+    "« prix choc » ≤ 8 et jamais « exemple » | textes humains sans code ni palier | aucun comptage −30 % | packs −20 % exact | bannière −30 % | ordre principe>routines>prix choc>Skin Match | Skin Match 40 profils | "
     "aucun appel API | responsive 360/375/390/768"
 )
