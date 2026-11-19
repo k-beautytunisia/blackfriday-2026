@@ -30,7 +30,13 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install collector dependency
-        run: python -m pip install --disable-pip-version-check requests
+        run: python -m pip install --disable-pip-version-check requests pillow
+      - name: Restore optimized product images cache
+        uses: actions/cache@v4
+        with:
+          path: .img-cache
+          key: bf-img-${{ github.run_id }}
+          restore-keys: bf-img-
       - name: Fetch current public catalog (read-only)
         run: python collect_catalogue.py
       - name: Build preview and validate source data
@@ -56,6 +62,9 @@ jobs:
           assert all(0 < by_id[i]['sp'] < by_id[i]['price'] for i in data['special'])
           assert all(by_id[i]['sp'] == build_site.special_price(by_id[i]['price']) for i in data['special'] if by_id[i]['spSource'] == 'simulation')
           assert all(all(i in by_id for i in r['ids']) for r in data['routines'])
+          imgs = sorted(Path('site/img').glob('*.webp'))
+          assert len(imgs) >= 0.8 * len(snap['products']) and all(f.stat().st_size > 1000 for f in imgs), len(imgs)
+          assert page.count('"image":"img/') >= 0.8 * len(snap['products'])
           print(f"special={len(data['special'])}/55 packs={len(data['routines'])} excluded={sorted(excluded)}")
           PY
       - name: Configure GitHub Pages

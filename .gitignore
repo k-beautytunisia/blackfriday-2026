@@ -12,3 +12,4 @@ __pycache__/
 /live-*.png
 /approval-payload-v1.md
 /tmp-*/
+.img-cache/

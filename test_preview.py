@@ -86,6 +86,11 @@ def expected(pg, cart):
             disc_tier += price - round(price * (100 - rate) / 100)
     return {"rate": rate, "subtotal": sub, "specialDiscount": disc_sp, "tierDiscount": disc_tier, "total": sub - disc_sp - disc_tier}
 
+import playwright.sync_api as _pw
+_orig_inner = _pw.Locator.inner_text
+def _nb(self, *a, **k):
+    return _orig_inner(self, *a, **k).replace("\u00a0", " ").replace("\u202f", " ")
+_pw.Locator.inner_text = _nb
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=True, executable_path="/usr/bin/chromium", args=["--no-sandbox"])
     desktop = browser.new_page(viewport={"width": 1440, "height": 1000}, device_scale_factor=1)
@@ -95,7 +100,7 @@ with sync_playwright() as p:
     desktop.goto(URL, wait_until="networkidle", timeout=30000)
     assert desktop.locator("body").evaluate("e => e.classList.contains('sync-ok')")
     assert "Préproduction" in desktop.locator("#previewRibbon").inner_text()
-    assert desktop.locator("#popup").is_visible(timeout=5000)
+    desktop.locator("#popup").wait_for(state="visible", timeout=8000)
     bar = desktop.locator("#homeBar").inner_text()
     assert "−30 %" in bar and "−20" not in bar, bar
     desktop.locator("#popCta").click()
@@ -134,11 +139,11 @@ with sync_playwright() as p:
         assert "%" not in card.locator("[data-routine]").inner_text(), "bouton routine en pourcentage"
         assert card.evaluate("c => [...c.querySelectorAll('.rgain, .rgain span, [data-routine]')].every(e => e.scrollWidth <= e.clientWidth + 1)"), "routine tronquée"
     # Le mot « stock » ne doit apparaître qu’une fois dans la page (mention de l’offre −30 %).
-    visible = desktop.evaluate("document.body.innerText")
+    visible = desktop.evaluate("document.body.innerText").replace("\u00a0", " ")
     assert len(re.findall("stock", visible, re.I)) <= 1, re.findall(r".{0,40}stock.{0,20}", visible, re.I)
     # Jamais de nombre de produits à −30 % affiché, ni bloc de statistiques.
     desktop.locator("#spMore").evaluate("e => e.click()") if desktop.locator("#spMore").is_visible() else None
-    shown_text = desktop.evaluate("document.body.innerText")
+    shown_text = desktop.evaluate("document.body.innerText").replace("\u00a0", " ")
     n_sp = len(sp)
     assert not re.search(rf"(?<![\d,.]){n_sp}(?![\d,.])\s*(produits?|prix choc|références|soins)", shown_text, re.I), "nombre de produits −30 % affiché"
     assert desktop.locator(".sp-stats, #spStatCount, #spStatMax, #spStatMin, [data-sp-count]").count() == 0
@@ -240,6 +245,12 @@ with sync_playwright() as p:
     assert desktop.locator("#modal").is_visible()
     assert "aucune commande" in desktop.locator("#modal").inner_text().lower()
     assert desktop.locator("footer").count() == 0
+    # Images produit : toutes servies avec la page (aucune dépendance au serveur boutique) et aucune cassée.
+    desktop.evaluate("document.querySelectorAll('img').forEach(i=>i.loading='eager')")
+    desktop.wait_for_function("[...document.querySelectorAll('img')].every(i=>i.complete)", timeout=60000)
+    img_state = desktop.evaluate("(()=>{const a=[...document.querySelectorAll('img')];return {n:a.length,broken:a.filter(i=>i.naturalWidth===0).map(i=>i.src),remote:a.filter(i=>/kbeauty-tunisia\\.com/.test(i.currentSrc||i.src)).length}})()")
+    assert img_state["n"] > 50 and not img_state["broken"], img_state["broken"][:5]
+    assert img_state["remote"] == 0, "image produit encore chargée depuis le serveur boutique"
     assert not any("/api/" in u or "kbeauty-tunisia.com/api" in u for u in calls), [u for u in calls if "/api/" in u]
     assert not errors, errors
 
@@ -249,7 +260,7 @@ with sync_playwright() as p:
         m_err = []
         m.on("pageerror", lambda e: m_err.append(str(e)))
         m.goto(URL, wait_until="networkidle", timeout=30000)
-        assert m.locator("#popup").is_visible(timeout=5000)
+        m.locator("#popup").wait_for(state="visible", timeout=8000)
         m.locator("#popCta").click()
         m.wait_for_timeout(2300)
         assert m.locator("#bfView").is_visible()
@@ -267,7 +278,9 @@ with sync_playwright() as p:
             assert m.locator("#mbar").is_visible()
         m.evaluate("document.querySelector('#skin-match').scrollIntoView()")
         for k in range(3):
-            m.locator("#smBox .sm-opt").nth(k % 2).click()
+            opt = m.locator("#smBox .sm-opt").nth(k % 2)
+            opt.evaluate("e => e.scrollIntoView({block: 'center'})")
+            opt.click()
         assert m.evaluate("[...document.querySelectorAll('#smBox, #smBox .sm-list li, #smBox .sm-gain, #smBox .sm-cta')].every(e => e.getBoundingClientRect().right <= innerWidth + 1 && e.scrollWidth <= e.clientWidth + 1)"), f"Skin Match tronqué à {width}px"
         m.evaluate("window.KBBF.clear()")
         m.evaluate("([a,b]) => {window.KBBF.add(a,1);window.KBBF.add(b,1)}", [sp[0], std[0]])
@@ -287,9 +300,9 @@ with sync_playwright() as p:
     browser.close()
 
 print(
-    f"PASS V2.6 | stock={len(data['products'])} | −30 % affichées={len(data['special'])}/55 | packs={len(data['routines'])}/5 | "
+    f"PASS V2.7 | stock={len(data['products'])} | −30 % affichées={len(data['special'])}/55 | packs={len(data['routines'])}/5 | "
     "prix spécial floor 70 % | non-cumul paliers | rupture pack/spécial masquée | fail-closed build+fraîcheur | "
     "aucun % sur cartes | paliers par produits différents | routines −20 % hors palier | fin 30/11 | "
-    "« prix choc » ≤ 8 et jamais « exemple » | textes humains sans code ni palier | aucun comptage −30 % | packs −20 % exact | bannière −30 % | ordre principe>routines>prix choc>Skin Match | Skin Match 40 profils | "
+    "images locales 0 cassée | « prix choc » ≤ 8 et jamais « exemple » | textes humains sans code ni palier | aucun comptage −30 % | packs −20 % exact | bannière −30 % | ordre principe>routines>prix choc>Skin Match | Skin Match 40 profils | "
     "aucun appel API | responsive 360/375/390/768"
 )

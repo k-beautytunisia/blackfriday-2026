@@ -8,6 +8,9 @@ Aucune commande, aucun paiement, aucune remise réelle : simulation uniquement.
 from pathlib import Path
 from datetime import datetime
 import argparse
+import hashlib
+import io
+from concurrent.futures import ThreadPoolExecutor
 import html
 import json
 import re
@@ -15,6 +18,11 @@ import re
 ROOT = Path(__file__).parent
 TEMPLATE = ROOT / "template.html"
 PAGE_MAX_AGE_MINUTES = 30
+# Images produit : copies allégées (WebP, 720 px max) servies avec la page, au lieu de 25 Mo tirés du serveur boutique.
+IMG_MAX_SIDE = 720
+IMG_QUALITY = 80
+IMG_CACHE = ROOT / ".img-cache"
+IMG_MAX_FAIL_RATIO = 0.2
 SPECIAL_RATE = 30
 
 # Sélection « Offre spéciale −30 % » transmise par le gérant le 18/11/2026 (55 captures de fiches),
@@ -165,6 +173,72 @@ def build_data(snap: dict):
     return data, by_id, excluded
 
 
+def _image_key(url: str, session) -> str:
+    """Clé de cache : URL + version publique (ETag/Last-Modified/taille). Une image remplacée à la même URL est recopiée."""
+    version = ""
+    try:
+        head = session.head(url, timeout=20, allow_redirects=True)
+        if head.ok:
+            version = "|".join(head.headers.get(h, "") for h in ("ETag", "Last-Modified", "Content-Length"))
+    except Exception:
+        version = ""
+    return hashlib.sha1(f"{url}|{version}".encode()).hexdigest()[:20]
+
+
+def _optimize_one(url: str, cache_dir: Path, out_dir: Path, session) -> str | None:
+    from PIL import Image
+
+    key = _image_key(url, session)
+    name = f"{key}.webp"
+    cached = cache_dir / name
+    if not cached.exists() or cached.stat().st_size < 1000:
+        try:
+            resp = session.get(url, timeout=60)
+            resp.raise_for_status()
+            if not resp.headers.get("Content-Type", "").startswith("image/"):
+                return None
+            im = Image.open(io.BytesIO(resp.content))
+            im.load()
+        except Exception:
+            return None
+        if im.mode not in ("RGB", "RGBA"):
+            im = im.convert("RGBA" if "transparency" in im.info or im.mode in ("LA", "P") else "RGB")
+        im.thumbnail((IMG_MAX_SIDE, IMG_MAX_SIDE), Image.LANCZOS)
+        buf = io.BytesIO()
+        im.save(buf, "WEBP", quality=IMG_QUALITY, method=6)
+        if buf.tell() < 1000:
+            return None
+        tmp = cached.with_suffix(".tmp")
+        tmp.write_bytes(buf.getvalue())
+        tmp.replace(cached)
+    (out_dir / name).write_bytes(cached.read_bytes())
+    return f"img/{name}"
+
+
+def localize_images(products: list, site_dir: Path, cache_dir: Path = IMG_CACHE) -> list:
+    """Remplace chaque image produit par une copie allégée locale. Échec ponctuel : l'URL d'origine reste en secours."""
+    import requests
+
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    out_dir = site_dir / "img"
+    if out_dir.exists():
+        for old in out_dir.glob("*.webp"):
+            old.unlink()
+    out_dir.mkdir(parents=True, exist_ok=True)
+    session = requests.Session()
+    session.headers["User-Agent"] = "kbeauty-bf-preview/1.0 (+read-only image copy)"
+    urls = sorted({p["image"] for p in products})
+    with ThreadPoolExecutor(max_workers=6) as pool:
+        results = dict(zip(urls, pool.map(lambda u: _optimize_one(u, cache_dir, out_dir, session), urls)))
+    failed = [u for u, local in results.items() if not local]
+    if len(failed) > len(urls) * IMG_MAX_FAIL_RATIO:
+        raise SystemExit(f"STOP: {len(failed)}/{len(urls)} images produit illisibles; aucun build généré.")
+    for p in products:
+        p["imageOrig"] = p["image"]
+        p["image"] = results.get(p["image"]) or p["image"]
+    return failed
+
+
 def render(data: dict, by_id: dict) -> str:
     data_js = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     has_special = bool(data["special"])
@@ -207,8 +281,10 @@ def main(argv=None) -> None:
     args = parser.parse_args(argv)
     snap = json.loads(Path(args.snapshot).read_text(encoding="utf-8"))
     data, by_id, excluded = build_data(snap)
-    page = render(data, by_id)
     site = Path(args.out)
+    site.mkdir(parents=True, exist_ok=True)
+    img_failed = localize_images(data["products"], site)
+    page = render(data, by_id)
     assets = site / "assets"
     site.mkdir(parents=True, exist_ok=True)
     assets.mkdir(parents=True, exist_ok=True)
@@ -219,7 +295,7 @@ def main(argv=None) -> None:
     print(
         f"Built index.html | stock products={len(data['products'])} | special −30 % affichées="
         f"{len(data['special'])}/{data['specialRequested']} | non affichées (hors stock/hors snapshot)={excluded} | "
-        f"packs={len(data['routines'])}/{len(ROUTINE_SPECS)} | snapshot={data['collectedAt']}"
+        f"packs={len(data['routines'])}/{len(ROUTINE_SPECS)} | images locales={len(data['products'])-len(img_failed)}/{len(data['products'])} | snapshot={data['collectedAt']}"
     )
 
 
